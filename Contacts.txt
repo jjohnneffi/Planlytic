@@ -1,0 +1,376 @@
+
+response = Map();
+user_email = user.get("email");
+if(sub_action.equalsIgnoreCase("Create"))
+{
+	response.put("type","form");
+	response.put("title","Add Contact");
+	response.put("name","contactdetails");
+	response.put("hint","Fill in client contact details");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Contact ID");
+	inputsList0.put("name","contactid");
+	inputsList0.put("placeholder","Enter contact id");
+	inputsList0.put("hint","Contact ID should be unique for every record");
+	// inputsList0.put("min","0");
+	// inputsList0.put("max","100");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Company | Person");
+	inputsList1.put("name","name");
+	inputsList1.put("placeholder","Enter company or person name");
+	// inputsList1.put("min_length","0");
+	// inputsList1.put("max_length","25");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","text");
+	inputsList.add(inputsList1);
+	inputsList3 = Map();
+	inputsList3.put("label","Email ID");
+	inputsList3.put("name","emailid");
+	inputsList3.put("placeholder","Enter email id");
+	// inputsList3.put("min_length","0");
+	// inputsList3.put("max_length","25");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","text");
+	inputsList3.put("format","email");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Website");
+	inputsList4.put("name","website");
+	inputsList4.put("placeholder","Enter website name");
+	// inputsList4.put("min_length","0");
+	// inputsList4.put("max_length","25");
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","text");
+	inputsList4.put("format","url");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Category");
+	inputsList5.put("name","category");
+	inputsList5.put("placeholder","Choose from the list of options");
+	inputsList5.put("multiple",false);
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","vipclient");
+	optionsList0.put("label","A - VIP Client");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","standardclient");
+	optionsList1.put("label","B - Standard Client");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","exclient");
+	optionsList2.put("label","C - Ex - Client");
+	optionsList.add(optionsList2);
+	inputsList5.put("options",optionsList);
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Description");
+	inputsList6.put("name","description");
+	inputsList6.put("placeholder","Describe about the contact");
+	// inputsList6.put("min_length","0");
+	// inputsList6.put("max_length","25");
+	inputsList6.put("mandatory",false);
+	inputsList6.put("type","textarea");
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Address");
+	inputsList7.put("name","address");
+	inputsList7.put("placeholder","Enter address details");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","text");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Postal Code");
+	inputsList8.put("name","postalcode");
+	inputsList8.put("placeholder","Enter postal code");
+	// inputsList8.put("min","0");
+	// inputsList8.put("max","100");
+	inputsList8.put("mandatory",false);
+	inputsList8.put("type","number");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Country");
+	inputsList9.put("name","country");
+	inputsList9.put("placeholder","Enter country name");
+	// inputsList9.put("min_length","0");
+	// inputsList9.put("max_length","25");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","text");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Time Zone");
+	inputsList10.put("name","timezone");
+	inputsList10.put("placeholder","Enter time zone");
+	inputsList10.put("multiple",false);
+	inputsList10.put("mandatory",true);
+	inputsList10.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","usa");
+	optionsList0.put("label","(GMT-05:00) Eastern Time (US & Canada)");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","uk");
+	optionsList1.put("label","(GMT+00:00) London");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","china");
+	optionsList2.put("label","(GMT+08:00) Beijing, Hong Kong");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","japan");
+	optionsList3.put("label","(GMT+09:00) Tokyo, Osaka, Sapporo");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","russia");
+	optionsList4.put("label","(GMT+03:00) Moscow, St. Petersburg");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","india");
+	optionsList5.put("label","(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi");
+	optionsList.add(optionsList5);
+	inputsList10.put("options",optionsList);
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","ID Code");
+	inputsList11.put("name","idcode");
+	inputsList11.put("placeholder","Enter id code");
+	// inputsList11.put("min","0");
+	// inputsList11.put("max","100");
+	inputsList11.put("mandatory",false);
+	inputsList11.put("type","number");
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Reg No.");
+	inputsList12.put("name","regno");
+	inputsList12.put("placeholder","Enter registration number");
+	// inputsList12.put("min","0");
+	// inputsList12.put("max","100");
+	inputsList12.put("mandatory",false);
+	inputsList12.put("type","number");
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Tax | VAT No.");
+	inputsList13.put("name","taxno");
+	inputsList13.put("placeholder","Enter tax or VAT number");
+	// inputsList13.put("min","0");
+	// inputsList13.put("max","100");
+	inputsList13.put("mandatory",false);
+	inputsList13.put("type","number");
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(sub_action.equalsIgnoreCase("View"))
+{
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Contact ID");
+	headersList.add("Company | Person");
+	headersList.add("Email ID");
+	headersList.add("Website");
+	headersList.add("Category");
+	headersList.add("About");
+	headersList.add("Address");
+	headersList.add("Postal Code");
+	headersList.add("Country");
+	headersList.add("Time Zone");
+	headersList.add("ID Code");
+	headersList.add("Reg No.");
+	headersList.add("Tax | VAT No.");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Contact ID",record.get("contactid"));
+			rowsList0.put("Company | Person",record.get("name"));
+			rowsList0.put("Email ID",record.get("emailid"));
+			rowsList0.put("Website",record.get("website"));
+			rowsList0.put("Category",record.get("category").get("label"));
+			rowsList0.put("About",record.get("description"));
+			rowsList0.put("Address",record.get("address"));
+			rowsList0.put("Postal Code",record.get("postalcode"));
+			rowsList0.put("Country",record.get("country"));
+			rowsList0.put("Time Zone",record.get("timezone").get("label"));
+			rowsList0.put("ID Code",record.get("idcode"));
+			rowsList0.put("Reg No.",record.get("regno"));
+			rowsList0.put("Tax | VAT No.",record.get("taxno"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No contact details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view contact details");
+}
+else if(sub_action.equalsIgnoreCase("Update"))
+{
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Contact ID");
+	headersList.add("Company | Person");
+	headersList.add("Email ID");
+	headersList.add("Website");
+	headersList.add("Category");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Contact ID",record.get("contactid"));
+			rowsList0.put("Company | Person",record.get("name"));
+			rowsList0.put("Email ID",record.get("emailid"));
+			rowsList0.put("Website",record.get("website"));
+			rowsList0.put("Category",record.get("category").get("label"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateContact";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No contact details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update contact details");
+}
+else if(sub_action.equalsIgnoreCase("Delete"))
+{
+	query_map = Map();
+	user_email = user.get("email");
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/6325/6325109.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Contact ID");
+	headersList.add("Company | Person");
+	headersList.add("Email ID");
+	headersList.add("Website");
+	headersList.add("Category");
+	headersList.add("Delete");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Contact ID",record.get("contactid"));
+			rowsList0.put("Company | Person",record.get("name"));
+			rowsList0.put("Email ID",record.get("emailid"));
+			rowsList0.put("Website",record.get("website"));
+			rowsList0.put("Category",record.get("category").get("label"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "deleteContact" + "|" + record.get("name") + "|" + record.get("contactid");
+			rowsList0.put("Delete","[Delete](invoke.function|confirmDeleteForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No contact details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to delete contact details");
+}
+else
+{
+	banner = {"type":"banner","status":"failure","text":"Select one of the options from the sub-action menu."};
+	return banner;
+}
+return response;

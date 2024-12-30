@@ -1,0 +1,683 @@
+
+id = "dashboard";
+if(target.containKey("id"))
+{
+	id = target.get("id");
+}
+sections = list();
+tabsArr = {{"label":"Dashboard","id":"dashboard"},{"label":"Archives","id":"archives"},{"label":"Reports","id":"reports"},{"label":"Clients","id":"clients"},{"label":"Help","id":"help"}};
+if(id == "dashboard")
+{
+	imgUrls = {"https://images.pexels.com/photos/357514/pexels-photo-357514.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/95916/pexels-photo-95916.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/891059/pexels-photo-891059.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/5561913/pexels-photo-5561913.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/2599244/pexels-photo-2599244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	header = {"title":"Dashboard"};
+	dataList = list();
+	eachData1 = Map();
+	eachData1.put("title","Archives");
+	eachData1.put("description","Access and review stored records");
+	eachData1.put("image_url",imgUrls.get(0));
+	buttonList1 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashone","emotion":"positive"}};
+	eachData1.put("buttons",buttonList1);
+	dataList.add(eachData1);
+	eachData2 = Map();
+	eachData2.put("title","Reports");
+	eachData2.put("description","Analyze and view comprehensive data");
+	eachData2.put("image_url",imgUrls.get(1));
+	buttonList2 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashtwo","emotion":"positive"}};
+	eachData2.put("buttons",buttonList2);
+	dataList.add(eachData2);
+	eachData3 = Map();
+	eachData3.put("title","Clients");
+	eachData3.put("description","Manage and organize client information");
+	eachData3.put("image_url",imgUrls.get(2));
+	buttonList3 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashthree","emotion":"positive"}};
+	eachData3.put("buttons",buttonList3);
+	dataList.add(eachData3);
+	eachData5 = Map();
+	eachData5.put("title","Analytics");
+	eachData5.put("description","Get data driven insights");
+	eachData5.put("image_url",imgUrls.get(4));
+	buttonList5 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashfive","emotion":"positive"}};
+	eachData5.put("buttons",buttonList5);
+	dataList.add(eachData5);
+	eachData6 = Map();
+	eachData6.put("title","Report Assistant");
+	eachData6.put("description","Review and analyze all reports");
+	eachData6.put("image_url",imgUrls.get(5));
+	buttonList6 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashsix","emotion":"positive"}};
+	eachData6.put("buttons",buttonList6);
+	dataList.add(eachData6);
+	eachData4 = Map();
+	eachData4.put("title","Help");
+	eachData4.put("description","Access documentation guide");
+	eachData4.put("image_url",imgUrls.get(3));
+	buttonList4 = {{"label":"View","type":"invoke.function","name":"dashboard","id":"dashfour","emotion":"positive"}};
+	eachData4.put("buttons",buttonList4);
+	dataList.add(eachData4);
+	elements = list();
+	elements.add({"type":"cards","data":dataList,"style":{"view":"gallery","size":"small"}});
+	elements.add({"type":"divider"});
+	sections.add({"id":1,"elements":elements});
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+else if(id == "archives")
+{
+	sections = list();
+	user_email = user.get("email");
+	imgUrls = {"https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	header = {"title":"Archives"};
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	proj_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records0 = response_map.get("list");
+	}
+	for each  record0 in records0
+	{
+		row0 = Map();
+		project_id = record0.get("projectid");
+		project_name = record0.get("projectname");
+		category = record0.get("category").get("label");
+		client = record0.get("client").get("label");
+		total_hours = record0.get("totalhours");
+		status = record0.get("status").get("label");
+		total_budget = record0.get("totalbudget");
+		due_date = record0.get("duedate");
+		product_cost = record0.get("productcost");
+		team_members = record0.get("teammembers");
+		labor_cost = record0.get("laborcost");
+		start_date = record0.get("startdate");
+		description = record0.get("description");
+		team_lead = record0.get("teamlead");
+		team_lead_first = team_lead.get("first_name");
+		team_lead_last = team_lead.get("last_name");
+		recordid0 = record0.get("id");
+		if(team_lead_last != null && team_lead_last.trim() != "")
+		{
+			team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+		}
+		else
+		{
+			team_lead_full = team_lead_first.trim();
+		}
+		mem_full = List();
+		for each  member in team_members
+		{
+			member_first = member.get("first_name");
+			member_last = member.get("last_name");
+			if(member_last != null && member_last.trim() != "")
+			{
+				member_full = member_first.trim() + " " + member_last.trim();
+			}
+			else
+			{
+				member_full = member_first.trim();
+			}
+			mem_full.add(member_full);
+		}
+		row0.put("Project ID",project_id);
+		row0.put("Project Name",project_name);
+		row0.put("Category",category);
+		row0.put("Client",client);
+		row0.put("Team Lead",team_lead_full);
+		row0.put("Team Members",mem_full);
+		row0.put("Total Hours",total_hours);
+		row0.put("Status",status);
+		row0.put("Total Budget",total_budget);
+		row0.put("Product Cost",product_cost);
+		row0.put("Labor Cost",labor_cost);
+		row0.put("Start Date",start_date);
+		row0.put("Due Date",due_date);
+		row0.put("Description",description);
+		row0.put("recordid0",recordid0);
+		proj_rows.add(row0);
+	}
+	dataList0 = list();
+	if(proj_rows.size() > 0)
+	{
+		for each  row0 in proj_rows
+		{
+			eachData0 = Map();
+			eachData0.put("title","Project Name");
+			eachData0.put("description",row0.get("Project Name"));
+			eachData0.put("image_url",imgUrls.get(0));
+			buttonList0 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row0.get("recordid0") + " " + "projectdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row0.get("recordid0") + " " + "projecteditwidget","emotion":"positive"}};
+			eachData0.put("buttons",buttonList0);
+			dataList0.add(eachData0);
+		}
+		elements0 = list();
+		elements0.add({"type":"title","text":"Projects"});
+		elements0.add({"type":"buttons","buttons":{{"label":"+  Projects","type":"invoke.function","name":"widgetForm","id":"createProject","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteProject","emotion":"negative"}}});
+		elements0.add({"type":"cards","data":dataList0,"style":{"view":"gallery","size":"small"}});
+		elements0.add({"type":"divider"});
+		sections.add({"id":1,"elements":elements0});
+	}
+	else
+	{
+		eachData0 = Map();
+		eachData0.put("title","No Records found!");
+		eachData0.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList0.add(eachData0);
+		elements0 = list();
+		elements0.add({"type":"title","text":"Projects"});
+		elements0.add({"type":"buttons","buttons":{{"label":"+  Projects","type":"invoke.function","name":"widgetForm","id":"createProject","emotion":"positive"}}});
+		elements0.add({"type":"cards","data":dataList0,"style":{"view":"gallery","size":"small"}});
+		elements0.add({"type":"divider"});
+		sections.add({"id":2,"elements":elements0});
+	}
+	imgUrls1 = {"https://images.pexels.com/photos/6963857/pexels-photo-6963857.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map1 = Map();
+	criteria_string = "quoteno!=''";
+	query_map1.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map1);
+	quot_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records1 = response_map.get("list");
+	}
+	for each  record1 in records1
+	{
+		row1 = Map();
+		project_id = record1.get("projectid");
+		date_of_issue = record1.get("dateofissue");
+		quote_no = record1.get("quoteno");
+		client = record1.get("client").get("label");
+		tax_value = record1.get("taxvalue");
+		quantity = record1.get("quantity");
+		close_date = record1.get("closedate");
+		duration = record1.get("duration");
+		status = record1.get("status").get("label");
+		comment = record1.get("comment");
+		due_date = record1.get("duedate");
+		unit_price = record1.get("unitprice");
+		product = record1.get("product");
+		discount = record1.get("discount");
+		recordid1 = record1.get("id");
+		row1.put("Project ID",project_id);
+		row1.put("Date of Issue",date_of_issue);
+		row1.put("Quote No",quote_no);
+		row1.put("Client",client);
+		row1.put("Tax Value",tax_value);
+		row1.put("Quantity",quantity);
+		row1.put("Close Date",close_date);
+		row1.put("Duration",duration);
+		row1.put("Status",status);
+		row1.put("Comment",comment);
+		row1.put("Due Date",due_date);
+		row1.put("Unit Price",unit_price);
+		row1.put("Product",product);
+		row1.put("Discount",discount);
+		row1.put("recordid1",recordid1);
+		quot_rows.add(row1);
+	}
+	dataList1 = list();
+	if(quot_rows.size() > 0)
+	{
+		for each  row1 in quot_rows
+		{
+			eachData1 = Map();
+			eachData1.put("title","Quote No");
+			eachData1.put("description",row1.get("Quote No"));
+			eachData1.put("image_url",imgUrls1.get(0));
+			buttonList1 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row1.get("recordid1") + " " + "quotedisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row1.get("recordid1") + " " + "quoteeditwidget","emotion":"positive"}};
+			eachData1.put("buttons",buttonList1);
+			dataList1.add(eachData1);
+		}
+		elements1 = list();
+		elements1.add({"type":"title","text":"Quotes"});
+		elements1.add({"type":"buttons","buttons":{{"label":"+  Quotes","type":"invoke.function","name":"widgetForm","id":"createquote","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deletequote","emotion":"negative"}}});
+		elements1.add({"type":"cards","data":dataList1,"style":{"view":"gallery","size":"small"}});
+		elements1.add({"type":"divider"});
+		sections.add({"id":3,"elements":elements1});
+	}
+	else
+	{
+		eachData1 = Map();
+		eachData1.put("title","No Records found!");
+		eachData1.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList1.add(eachData1);
+		elements1 = list();
+		elements1.add({"type":"title","text":"Quotes"});
+		elements1.add({"type":"buttons","buttons":{{"label":"+  Quotes","type":"invoke.function","name":"widgetForm","id":"createquote","emotion":"positive"}}});
+		elements1.add({"type":"cards","data":dataList1,"style":{"view":"gallery","size":"small"}});
+		elements1.add({"type":"divider"});
+		sections.add({"id":4,"elements":elements1});
+	}
+	imgUrls2 = {"https://images.pexels.com/photos/8872366/pexels-photo-8872366.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map2 = Map();
+	criteria_string = "invoiceno!=''";
+	query_map2.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map2);
+	invo_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records2 = response_map.get("list");
+	}
+	for each  record2 in records2
+	{
+		row2 = Map();
+		project_id = record2.get("projectid");
+		date_of_issue = record2.get("dateofissue");
+		payer = record2.get("payer").get("label");
+		tax_value = record2.get("taxvalue");
+		quantity = record2.get("quantity");
+		author = record2.get("author");
+		author_first = author.get("first_name");
+		author_last = author.get("last_name");
+		if(author_last != null && author_last.trim() != "")
+		{
+			author_full = author_first.trim() + " " + author_last.trim();
+		}
+		else
+		{
+			author_full = author_first.trim();
+		}
+		comment = record2.get("comment");
+		due_date = record2.get("duedate");
+		overdue = record2.get("overdue");
+		paymentmethod = record2.get("paymentmethod").get("label");
+		invoice_no = record2.get("invoiceno");
+		unit_price = record2.get("unitprice");
+		product = record2.get("product");
+		discount = record2.get("discount");
+		recordid2 = record2.get("id");
+		row2.put("Project ID",project_id);
+		row2.put("Invoice No",invoice_no);
+		row2.put("Date of Issue",date_of_issue);
+		row2.put("Payer",payer);
+		row2.put("Tax Value",tax_value);
+		row2.put("Quantity",quantity);
+		row2.put("Author",author_full);
+		row2.put("Comment",comment);
+		row2.put("Due Date",due_date);
+		row2.put("Overdue",overdue);
+		row2.put("Payment Method",paymentmethod);
+		row2.put("Unit Price",unit_price);
+		row2.put("Product",product);
+		row2.put("Discount",discount);
+		row2.put("recordid2",recordid2);
+		invo_rows.add(row2);
+	}
+	dataList2 = list();
+	if(invo_rows.size() > 0)
+	{
+		for each  row2 in invo_rows
+		{
+			eachData2 = Map();
+			eachData2.put("title","Invoice No");
+			eachData2.put("description",row2.get("Invoice No"));
+			eachData2.put("image_url",imgUrls2.get(0));
+			buttonList2 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row2.get("recordid2") + " " + "invoicedisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row2.get("recordid2") + " " + "invoiceeditwidget","emotion":"positive"}};
+			eachData2.put("buttons",buttonList2);
+			dataList2.add(eachData2);
+		}
+		elements2 = list();
+		elements2.add({"type":"title","text":"Invoices"});
+		elements2.add({"type":"buttons","buttons":{{"label":"+  Invoices","type":"invoke.function","name":"widgetForm","id":"createInvoice","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteInvoice","emotion":"negative"}}});
+		elements2.add({"type":"cards","data":dataList2,"style":{"view":"gallery","size":"small"}});
+		elements2.add({"type":"divider"});
+		sections.add({"id":5,"elements":elements2});
+	}
+	else
+	{
+		eachData2 = Map();
+		eachData2.put("title","No Records found!");
+		eachData2.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList2.add(eachData2);
+		elements2 = list();
+		elements2.add({"type":"title","text":"Invoices"});
+		elements2.add({"type":"buttons","buttons":{{"label":"+  Invoices","type":"invoke.function","name":"widgetForm","id":"createInvoice","emotion":"positive"}}});
+		elements2.add({"type":"cards","data":dataList2,"style":{"view":"gallery","size":"small"}});
+		elements2.add({"type":"divider"});
+		sections.add({"id":6,"elements":elements2});
+	}
+	imgUrls3 = {"https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map3 = Map();
+	criteria_string = "billno>=0";
+	query_map3.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map3);
+	bill_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records3 = response_map.get("list");
+	}
+	for each  record3 in records3
+	{
+		row3 = Map();
+		project_id = record3.get("projectid");
+		date_of_issue = record3.get("dateofissue");
+		tax = record3.get("tax");
+		quantity = record3.get("quantity");
+		due_date = record3.get("duedate");
+		bill_no = record3.get("billno");
+		unit_price = record3.get("unitprice");
+		price_list = record3.get("pricelist").get("label");
+		comment = record3.get("comment");
+		issuer = record3.get("issuer");
+		issuer_first = issuer.get("first_name");
+		issuer_last = issuer.get("last_name");
+		if(issuer_last != null && issuer_last.trim() != "")
+		{
+			issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+		}
+		else
+		{
+			issuer_full = issuer_first.trim();
+		}
+		paymentmethod = record3.get("paymentmethod").get("label");
+		recipient = record3.get("recipient").get("label");
+		product = record3.get("product");
+		discount = record3.get("discount");
+		recordid3 = record3.get("id");
+		row3.put("Project ID",project_id);
+		row3.put("Date of Issue",date_of_issue);
+		row3.put("Tax",tax);
+		row3.put("Quantity",quantity);
+		row3.put("Due Date",due_date);
+		row3.put("Bill No",bill_no);
+		row3.put("Unit Price",unit_price);
+		row3.put("Price List",price_list);
+		row3.put("Comment",comment);
+		row3.put("Issuer",issuer_full);
+		row3.put("Payment Method",paymentmethod);
+		row3.put("Recipient",recipient);
+		row3.put("Product",product);
+		row3.put("Discount",discount);
+		row3.put("recordid3",recordid3);
+		bill_rows.add(row3);
+	}
+	dataList3 = list();
+	if(bill_rows.size() > 0)
+	{
+		for each  row3 in bill_rows
+		{
+			eachData3 = Map();
+			eachData3.put("title","Bill No");
+			eachData3.put("description",row3.get("Bill No"));
+			eachData3.put("image_url",imgUrls3.get(0));
+			buttonList3 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row3.get("recordid3") + " " + "billdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row3.get("recordid3") + " " + "billeditwidget","emotion":"positive"}};
+			eachData3.put("buttons",buttonList3);
+			dataList3.add(eachData3);
+		}
+		elements3 = list();
+		elements3.add({"type":"title","text":"Bills"});
+		elements3.add({"type":"buttons","buttons":{{"label":"+  Bills","type":"invoke.function","name":"widgetForm","id":"createBill","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteBill","emotion":"negative"}}});
+		elements3.add({"type":"cards","data":dataList3,"style":{"view":"gallery","size":"small"}});
+		elements3.add({"type":"divider"});
+		sections.add({"id":7,"elements":elements3});
+	}
+	else
+	{
+		eachData3 = Map();
+		eachData3.put("title","No Records found!");
+		eachData3.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList3.add(eachData3);
+		elements3 = list();
+		elements3.add({"type":"title","text":"Bills"});
+		elements3.add({"type":"buttons","buttons":{{"label":"+  Bills","type":"invoke.function","name":"widgetForm","id":"createBill","emotion":"positive"}}});
+		elements3.add({"type":"cards","data":dataList3,"style":{"view":"gallery","size":"small"}});
+		elements3.add({"type":"divider"});
+		sections.add({"id":8,"elements":elements3});
+	}
+	imgUrls4 = {"https://images.pexels.com/photos/3854816/pexels-photo-3854816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map4 = Map();
+	criteria_string = "taskno>=0";
+	query_map4.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map4);
+	task_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records4 = response_map.get("list");
+	}
+	for each  record4 in records4
+	{
+		row4 = Map();
+		condition = record4.get("condition").get("label");
+		activity = record4.get("activity").get("label");
+		duration = record4.get("duration");
+		title = record4.get("title");
+		due_date = record4.get("duedate");
+		start_date = record4.get("startdate");
+		description = record4.get("description");
+		priority = record4.get("priority").get("label");
+		users = record4.get("users");
+		users_first = users.get("first_name");
+		users_last = users.get("last_name");
+		taskno = record4.get("taskno");
+		if(users_last != null && users_last.trim() != "")
+		{
+			users_full = users_first.trim() + " " + users_last.trim();
+		}
+		else
+		{
+			users_full = users_first.trim();
+		}
+		recordid4 = record4.get("id");
+		row4.put("Condition",condition);
+		row4.put("Activity",activity);
+		row4.put("Duration",duration);
+		row4.put("Title",title);
+		row4.put("Start Date",start_date);
+		row4.put("Due Date",due_date);
+		row4.put("Priority",priority);
+		row4.put("Description",description);
+		row4.put("Users",users_full);
+		row4.put("Task No",taskno);
+		row4.put("recordid4",recordid4);
+		task_rows.add(row4);
+	}
+	dataList4 = list();
+	if(task_rows.size() > 0)
+	{
+		for each  row4 in task_rows
+		{
+			eachData4 = Map();
+			eachData4.put("title","Task Name");
+			eachData4.put("description",row4.get("Title"));
+			eachData4.put("image_url",imgUrls4.get(0));
+			buttonList4 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row4.get("recordid4") + " " + "taskdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row4.get("recordid4") + " " + "taskeditwidget","emotion":"positive"}};
+			eachData4.put("buttons",buttonList4);
+			dataList4.add(eachData4);
+		}
+		elements4 = list();
+		elements4.add({"type":"title","text":"Task"});
+		elements4.add({"type":"buttons","buttons":{{"label":"+  Task","type":"invoke.function","name":"widgetForm","id":"createTask","emotion":"positive"},{"label":"✓  Done","type":"invoke.function","name":"widgetForm","id":"doneTask","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteTask","emotion":"negative"}}});
+		elements4.add({"type":"cards","data":dataList4,"style":{"view":"gallery","size":"small"}});
+		elements4.add({"type":"divider"});
+		sections.add({"id":9,"elements":elements4});
+	}
+	else
+	{
+		eachData4 = Map();
+		eachData4.put("title","No Records found!");
+		eachData4.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList4.add(eachData4);
+		elements4 = list();
+		elements4.add({"type":"title","text":"Task"});
+		elements4.add({"type":"buttons","buttons":{{"label":"+  Task","type":"invoke.function","name":"widgetForm","id":"createTask","emotion":"positive"}}});
+		elements4.add({"type":"cards","data":dataList4,"style":{"view":"gallery","size":"small"}});
+		elements4.add({"type":"divider"});
+		sections.add({"id":10,"elements":elements4});
+	}
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+else if(id == "reports")
+{
+	imgUrls = {"https://images.pexels.com/photos/6476260/pexels-photo-6476260.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600","https://images.pexels.com/photos/7654579/pexels-photo-7654579.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load","https://images.pexels.com/photos/128867/coins-currency-investment-insurance-128867.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://images.pexels.com/photos/5716032/pexels-photo-5716032.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2","https://media.istockphoto.com/id/1351883539/photo/internet-shopping-concept.jpg?s=612x612&w=0&k=20&c=JyGTer737usB4hTJK4JQ88iqLdOwW8kQPeBWQp57cic="};
+	header = {"title":"Reports"};
+	dataList = list();
+	eachData1 = Map();
+	eachData1.put("title","Productivity");
+	eachData1.put("description","Understand your team's efficiency");
+	eachData1.put("image_url",imgUrls.get(0));
+	buttonList1 = {{"label":"View","type":"invoke.function","name":"reports","id":"reportone","emotion":"positive"}};
+	eachData1.put("buttons",buttonList1);
+	dataList.add(eachData1);
+	eachData2 = Map();
+	eachData2.put("title","Utilization");
+	eachData2.put("description","Optimize team utilization and resources");
+	eachData2.put("image_url",imgUrls.get(1));
+	buttonList2 = {{"label":"View","type":"invoke.function","name":"reports","id":"reporttwo","emotion":"positive"}};
+	eachData2.put("buttons",buttonList2);
+	dataList.add(eachData2);
+	eachData3 = Map();
+	eachData3.put("title","Revenue");
+	eachData3.put("description","Assess revenue to evaluate financial viability");
+	eachData3.put("image_url",imgUrls.get(2));
+	buttonList3 = {{"label":"View","type":"invoke.function","name":"reports","id":"reportthree","emotion":"positive"}};
+	eachData3.put("buttons",buttonList3);
+	dataList.add(eachData3);
+	eachData4 = Map();
+	eachData4.put("title","Cost");
+	eachData4.put("description","Track bills to optimize cost management");
+	eachData4.put("image_url",imgUrls.get(3));
+	buttonList4 = {{"label":"View","type":"invoke.function","name":"reports","id":"reportfour","emotion":"positive"}};
+	eachData4.put("buttons",buttonList4);
+	dataList.add(eachData4);
+	eachData5 = Map();
+	eachData5.put("title","Profitability");
+	eachData5.put("description","Assess margins to identify profit drivers");
+	eachData5.put("image_url",imgUrls.get(4));
+	buttonList5 = {{"label":"View","type":"invoke.function","name":"reports","id":"reportfive","emotion":"positive"}};
+	eachData5.put("buttons",buttonList5);
+	dataList.add(eachData5);
+	eachData6 = Map();
+	eachData6.put("title","Sales");
+	eachData6.put("description","Analyze pipeline and sales to drive growth");
+	eachData6.put("image_url",imgUrls.get(5));
+	buttonList6 = {{"label":"View","type":"invoke.function","name":"reports","id":"reportsix","emotion":"positive"}};
+	eachData6.put("buttons",buttonList6);
+	dataList.add(eachData6);
+	sections = list();
+	elements1 = list();
+	elements1.add({"type":"cards","data":dataList,"style":{"view":"gallery","size":"small"}});
+	elements1.add({"type":"divider"});
+	sections.add({"id":1,"elements":elements1});
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+else if(id == "clients")
+{
+	user_email = user.get("email");
+	imgUrls = {"https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	header = {"title":"Clients","buttons":{{"label":"+  New","type":"invoke.function","name":"widgetForm","id":"newcontactwidget"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deletecontactwidget"}}};
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			row = Map();
+			name = record.get("name");
+			description = record.get("description");
+			regno = record.get("regno");
+			website = record.get("website");
+			emailid = record.get("emailid");
+			category = record.get("category");
+			category_label = category.get("label");
+			contactid = record.get("contactid");
+			country = record.get("country");
+			timezone = record.get("timezone");
+			timezone_label = timezone.get("label");
+			idcode = record.get("idcode");
+			postalcode = record.get("postalcode");
+			address = record.get("address");
+			recordid = record.get("id");
+			row.put("name",name);
+			row.put("description",description);
+			row.put("regno",regno);
+			row.put("website",website);
+			row.put("emailid",emailid);
+			row.put("category",category_label);
+			row.put("contactid",contactid);
+			row.put("country",country);
+			row.put("timezone",timezone_label);
+			row.put("idcode",idcode);
+			row.put("postalcode",postalcode);
+			row.put("address",address);
+			row.put("recordid",recordid);
+			rows.add(row);
+		}
+	}
+	dataList = list();
+	if(rows.size() == 0)
+	{
+		eachData1 = Map();
+		eachData1.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		eachData1.put("title","No Records found!");
+		dataList.add(eachData1);
+	}
+	else
+	{
+		for each  row in rows
+		{
+			eachData = Map();
+			eachData.put("title","Client Name");
+			eachData.put("description",row.get("name"));
+			eachData.put("image_url",imgUrls.get(0));
+			buttonList = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row.get("recordid") + " " + "contactdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row.get("recordid") + " " + "contacteditwidget","emotion":"positive"}};
+			eachData.put("buttons",buttonList);
+			dataList.add(eachData);
+		}
+	}
+	elements = list();
+	elements.add({"type":"cards","data":dataList,"style":{"view":"gallery","size":"small"}});
+	elements.add({"type":"divider"});
+	sections = list();
+	sections.add({"id":2,"elements":elements});
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+else if(id == "help")
+{
+	header = {"title":"Help"};
+	sections = list();
+	elements1 = list();
+	// 	elements1.add({"type":"title","text":"Overview"});
+	elements1.add({"type":"text","text":"It’s the Scoro extension — your all-in-one tool for managing projects, finances, and clients!  It simplifies your workflow and boosts productivity with smart data handling and awesome analytics."});
+	// 	elements1.add({"type":"subtext","text":"This is the subtext"});
+	elements1.add({"type":"divider"});
+	sections.add({"id":1,"elements":elements1});
+	elements2 = list();
+	elements2.add({"type":"title","text":"Bots"});
+	elements2.add({"type":"fields","data":{{"Create":"Quickly create new records for Projects, Quotes, Invoices, Bills, and Tasks."},{"View":"Easily access and view all records."},{"Update":"Modify or update details for any record."},{"Delete":"Remove records that are no longer needed."},{"Contacts":"Organize and manage client contact information."}},"style":{"short":false}});
+	// 	elements2.add({"type":"subtext","text":"This is the subtext for section 2!"});
+	elements2.add({"type":"divider"});
+	sections.add({"id":2,"elements":elements2});
+	elements3 = list();
+	elements3.add({"type":"title","text":"Slash Commands"});
+	elements3.add({"type":"fields","data":{{"/contact":"Mange and operate on contact records. Use the command options /contact -add, /contact -view, /contact -upd, /contact -del."},{"/deletecontact":"To delete sample contacts stored by default."},{"/deletesample":"To delete default sample records. Use the command options /deletesample -proj, /deletesample -quote, /deletesample -invo, /deletesample -bill, /deletesample -task."},{"/task":"To perform task operations. Use the command options /task -add, /task -view, /task -upd, /task -del."}},"style":{"short":false}});
+	elements3.add({"type":"divider"});
+	sections.add({"id":3,"elements":elements3});
+	elements4 = list();
+	elements4.add({"type":"title","text":"Message Actions"});
+	elements4.add({"type":"fields","data":{{"Post to Channel":"To share the bot's generated content in the #announcements channel, ensuring key information is visible to all relevant members."},{"Post to Chat":"To share the bot's response in the chat for visibility and collaboration."}},"style":{"short":false}});
+	elements4.add({"type":"divider"});
+	sections.add({"id":4,"elements":elements4});
+	elements5 = list();
+	elements5.add({"type":"title","text":"Widget"});
+	elements5.add({"type":"fields","data":{{"Dashboard":"Displays an overview about the extension."},{"Archives":"View and manage all records."},{"Clients":"View and manage all records related to client contacts."},{"Reports":"Analyze data with detailed visual reports related to productivity, utilization, revenue, cost, profitability, sales alongwith personalized report assistant. (Ensure you have a Zoho Analytics account and log in if prompted.)"},{"Help":"Find documentation about the extension."}},"style":{"short":false}});
+	elements5.add({"type":"divider"});
+	sections.add({"id":5,"elements":elements5});
+	elements6 = list();
+	elements6.add({"type":"title","text":"Schedulers"});
+	elements6.add({"type":"fields","data":{{"Task":"Display list of updated tasks regularly from database for easy access and efficient tracking."},{"Project":"Display list of assigned projects from the database for easy access and effective management"}},"style":{"short":false}});
+	elements6.add({"type":"divider"});
+	sections.add({"id":6,"elements":elements6});
+	elements8 = list();
+	elements8.add({"type":"title","text":"Channel"});
+	elements8.add({"type":"fields","data":{{"#Collab":"An external organization channel facilitates seamless client collaboration with project updates, file sharing, and direct communication"}},"style":{"short":false}});
+	elements8.add({"type":"divider"});
+	sections.add({"id":8,"elements":elements8});
+	elements7 = list();
+	elements7.add({"type":"title","text":"Notes"});
+	elements7.add({"type":"fields","data":{{"Note 1":"This extension is compatible with accounts linked to the US data center (zoho.com)"},{"Note 2":"Check for suggestions provided in slash commands"},{"Note 3":"Use the refresh button to return to previous pages when navigating widget cards in the following tabs: Dashboard (Analytics, Report Assistant) and Reports (Productivity, Utilization, Revenue, Cost, Profitability, Sales)"}},"style":{"short":false}});
+	elements7.add({"type":"divider"});
+	sections.add({"id":7,"elements":elements7});
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections};

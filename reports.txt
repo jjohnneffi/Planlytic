@@ -1,0 +1,4162 @@
+
+// Reports
+response = Map();
+if(target.get("id") == "reportone")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 1
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000045497"},"active_tab":"reports"};
+}
+else if(target.get("id") == "reporttwo")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 2
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000047738"},"active_tab":"reports"};
+}
+else if(target.get("id") == "reportthree")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 3
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000050048"},"active_tab":"reports"};
+}
+else if(target.get("id") == "reportfour")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 4 
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000052501"},"active_tab":"reports"};
+}
+else if(target.get("id") == "reportfive")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 5
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000057118"},"active_tab":"reports"};
+}
+else if(target.get("id") == "reportsix")
+{
+	workspaceName = "Scoro";
+	workspaceDesc = "Scoro";
+	configMap = Map();
+	configMap.put("workspaceName",workspaceName);
+	configMap.put("workspaceDesc",workspaceDesc);
+	orgDetails = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/orgs"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info orgDetails;
+	// 1
+	orgval = orgDetails.get("data").get("orgs");
+	orgId = orgval.get(0).get("orgId");
+	info "Organization ID: " + orgId;
+	// 2
+	workspacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	info workspacecheck;
+	// 3
+	workspaces = workspacecheck.get("data").get("ownedWorkspaces");
+	workspaceExists = false;
+	for each  workspace in workspaces
+	{
+		if(workspace.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workspaceExists = true;
+		}
+	}
+	if(workspaceExists == false)
+	{
+		response = invokeurl
+		[
+			url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+			type :POST
+			parameters:{"CONFIG":configMap.toString()}
+			headers:{"ZANALYTICS-ORGID":orgId}
+			connection:"cliq_analytics"
+		];
+	}
+	info response;
+	// 4
+	info workspacecheck;
+	// 5
+	workespacecheck = invokeurl
+	[
+		url :"https://analyticsapi.zoho.com/restapi/v2/workspaces"
+		type :GET
+		connection:"cliq_analytics"
+	];
+	workospace = workespacecheck.get("data").get("ownedWorkspaces");
+	for each  resp in workospace
+	{
+		if(resp.get("workspaceName").equalsIgnoreCase(workspaceName))
+		{
+			workid = resp.get("workspaceId");
+		}
+	}
+	info workospace;
+	// 6
+	info workid;
+	// 7
+	email = user.get("email");
+	query_map1 = Map();
+	criteria_string1 = "projectid>=0";
+	query_map1.put("criteria",criteria_string1);
+	response_map1 = zoho.cliq.getRecords("projectdb",query_map1);
+	query_map2 = Map();
+	criteria_string2 = "quoteno!=''";
+	query_map2.put("criteria",criteria_string2);
+	response_map2 = zoho.cliq.getRecords("quotedb",query_map2);
+	query_map3 = Map();
+	criteria_string3 = "invoiceno!=''";
+	query_map3.put("criteria",criteria_string3);
+	response_map3 = zoho.cliq.getRecords("invoicedb",query_map3);
+	query_map4 = Map();
+	criteria_string4 = "billno>=0";
+	query_map4.put("criteria",criteria_string4);
+	response_map4 = zoho.cliq.getRecords("billsdb",query_map4);
+	query_map5 = Map();
+	criteria_string5 = "taskno>=0";
+	query_map5.put("criteria",criteria_string5);
+	response_map5 = zoho.cliq.getRecords("taskdb",query_map5);
+	addstable1 = {"tableDesign":{"TABLENAME":"(1)","TABLEDESCRIPTION":"(1)","COLUMNS":{{"COLUMNNAME":"Category","DATATYPE":"PLAIN"},{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Labor Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product Cost","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project Name","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Lead","DATATYPE":"PLAIN"},{"COLUMNNAME":"Team Members","DATATYPE":"PLAIN"},{"COLUMNNAME":"Total Budget","DATATYPE":"NUMBER"},{"COLUMNNAME":"Total Hours","DATATYPE":"NUMBER"}}}};
+	addstable2 = {"tableDesign":{"TABLENAME":"(2)","TABLEDESCRIPTION":"(2)","COLUMNS":{{"COLUMNNAME":"Client","DATATYPE":"PLAIN"},{"COLUMNNAME":"Estimated Closing Date","DATATYPE":"DATE"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Estimated Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Product","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quote No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Status","DATATYPE":"PLAIN"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"}}}};
+	addstable3 = {"tableDesign":{"TABLENAME":"(3)","TABLEDESCRIPTION":"(3)","COLUMNS":{{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"NUMBER"},{"COLUMNNAME":"Overdue Interest","DATATYPE":"PERCENT"},{"COLUMNNAME":"Payer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Invoice No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable4 = {"tableDesign":{"TABLENAME":"(4)","TABLEDESCRIPTION":"(4)","COLUMNS":{{"COLUMNNAME":"Bill No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Comment","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Date of Issue","DATATYPE":"DATE"},{"COLUMNNAME":"Discount","DATATYPE":"PERCENT"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Issuer","DATATYPE":"PLAIN"},{"COLUMNNAME":"Payment Method","DATATYPE":"PLAIN"},{"COLUMNNAME":"Price List","DATATYPE":"PLAIN"},{"COLUMNNAME":"Product | Description","DATATYPE":"PLAIN"},{"COLUMNNAME":"Project ID","DATATYPE":"NUMBER"},{"COLUMNNAME":"Quantity","DATATYPE":"NUMBER"},{"COLUMNNAME":"Recipient","DATATYPE":"PLAIN"},{"COLUMNNAME":"Unit Price","DATATYPE":"NUMBER"},{"COLUMNNAME":"Tax Value","DATATYPE":"PERCENT"}}}};
+	addstable5 = {"tableDesign":{"TABLENAME":"(5)","TABLEDESCRIPTION":"(5)","COLUMNS":{{"COLUMNNAME":"Activity Type","DATATYPE":"PLAIN"},{"COLUMNNAME":"Condition","DATATYPE":"PLAIN"},{"COLUMNNAME":"Description","DATATYPE":"MULTI_LINE"},{"COLUMNNAME":"Due Date","DATATYPE":"DATE"},{"COLUMNNAME":"Planned Duration","DATATYPE":"NUMBER"},{"COLUMNNAME":"Priority","DATATYPE":"PLAIN"},{"COLUMNNAME":"Start Date","DATATYPE":"DATE"},{"COLUMNNAME":"Task No","DATATYPE":"NUMBER"},{"COLUMNNAME":"Title","DATATYPE":"PLAIN"},{"COLUMNNAME":"Users","DATATYPE":"PLAIN"}}}};
+	tableConfigs = List();
+	tableConfigs.add(addstable1);
+	tableConfigs.add(addstable2);
+	tableConfigs.add(addstable3);
+	tableConfigs.add(addstable4);
+	tableConfigs.add(addstable5);
+	for each  addstable in tableConfigs
+	{
+		tablename = addstable.get("tableDesign").get("TABLENAME");
+		if(tablename.equalsIgnoreCase("(1)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 8
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable1 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 9
+			info addtable1;
+			// 10
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			// 11
+			if(viewId == 0)
+			{
+				viewId = addtable1.get("data").get("viewId");
+			}
+			if(response_map1.get("status").equalsIgnoreCase("SUCCESS") && response_map1.get("list").size() > 0)
+			{
+				records1 = response_map1.get("list");
+			}
+			analyticsData1 = List();
+			for each  record1 in records1
+			{
+				project_id = record1.get("projectid");
+				project_name = record1.get("projectname");
+				category = record1.get("category").get("label");
+				client = record1.get("client").get("label");
+				total_hours = record1.get("totalhours");
+				status = record1.get("status").get("label");
+				total_budget = record1.get("totalbudget");
+				due_date = record1.get("duedate");
+				product_cost = record1.get("productcost");
+				team_members = record1.get("teammembers");
+				labor_cost = record1.get("laborcost");
+				start_date = record1.get("startdate");
+				description = record1.get("description");
+				team_lead = record1.get("teamlead");
+				team_lead_first = team_lead.get("first_name");
+				team_lead_last = team_lead.get("last_name");
+				if(team_lead_last != null && team_lead_last.trim() != "")
+				{
+					team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+				}
+				else
+				{
+					team_lead_full = team_lead_first.trim();
+				}
+				mem_full = List();
+				for each  member in team_members
+				{
+					member_first = member.get("first_name");
+					member_last = member.get("last_name");
+					if(member_last != null && member_last.trim() != "")
+					{
+						member_full = member_first.trim() + " " + member_last.trim();
+					}
+					else
+					{
+						member_full = member_first.trim();
+					}
+					mem_full.add(member_full);
+				}
+				mem_full_string = mem_full.toString();
+				row = Map();
+				row.put("Category",category);
+				row.put("Client",client);
+				row.put("Description",description);
+				row.put("Due Date",due_date);
+				row.put("Labor Cost",labor_cost);
+				row.put("Product Cost",product_cost);
+				row.put("Project ID",project_id);
+				row.put("Project Name",project_name);
+				row.put("Start Date",start_date);
+				row.put("Status",status);
+				row.put("Team Lead",team_lead_full);
+				row.put("Team Members",mem_full_string);
+				row.put("Total Budget",total_budget);
+				row.put("Total Hours",total_hours);
+				analyticsData1.add(row);
+			}
+			newdata1 = list();
+			newdata1.add(analyticsData1);
+			info newdata1;
+			// 12
+			valuecrit1 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit1.toString(),"DATA":newdata1.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			// 13
+			info addvalue;
+			// 14
+		}
+		else if(tablename.equalsIgnoreCase("(2)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			// 15
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable2 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			// 16
+			info addtable2;
+			// 17
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable2.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						info "check1";
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info tablename;
+			// 19
+			info viewtable;
+			// 20
+			if(viewId == 0)
+			{
+				info "check2";
+				viewId = addtable2.get("data").get("viewId");
+			}
+			info viewId;
+			// 20
+			if(response_map2.get("status").equalsIgnoreCase("SUCCESS") && response_map2.get("list").size() > 0)
+			{
+				records2 = response_map2.get("list");
+			}
+			analyticsData2 = List();
+			for each  record2 in records2
+			{
+				project_id = record2.get("projectid");
+				date_of_issue = record2.get("dateofissue");
+				quote_no = record2.get("quoteno");
+				client = record2.get("client").get("label");
+				tax_value = record2.get("taxvalue");
+				quantity = record2.get("quantity");
+				close_date = record2.get("closedate");
+				duration = record2.get("duration");
+				status = record2.get("status").get("label");
+				comment = record2.get("comment");
+				due_date = record2.get("duedate");
+				unit_price = record2.get("unitprice");
+				product = record2.get("product");
+				discount = record2.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Quote No",quote_no);
+				row.put("Client",client);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Estimated Closing Date",close_date);
+				row.put("Estimated Duration",duration);
+				row.put("Status",status);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Unit Price",unit_price);
+				row.put("Product",product);
+				row.put("Discount",discount);
+				analyticsData2.add(row);
+			}
+			newdata2 = list();
+			newdata2.add(analyticsData2);
+			info newdata2;
+			valuecrit2 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit2.toString(),"DATA":newdata2.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(3)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable3 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable3;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable3.get("data").get("viewId");
+			}
+			if(response_map3.get("status").equalsIgnoreCase("SUCCESS") && response_map3.get("list").size() > 0)
+			{
+				records3 = response_map3.get("list");
+			}
+			analyticsData3 = List();
+			for each  record3 in records3
+			{
+				project_id = record3.get("projectid");
+				date_of_issue = record3.get("dateofissue");
+				payer = record3.get("payer").get("label");
+				tax_value = record3.get("taxvalue");
+				quantity = record3.get("quantity");
+				author = record3.get("author").get("first_name");
+				comment = record3.get("comment");
+				due_date = record3.get("duedate");
+				overdue = record3.get("overdue");
+				paymentmethod = record3.get("paymentmethod").get("label");
+				invoice_no = record3.get("invoiceno");
+				unit_price = record3.get("unitprice");
+				product = record3.get("product");
+				discount = record3.get("discount");
+				row = Map();
+				row.put("Project ID",project_id);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Payer",payer);
+				row.put("Tax Value",tax_value);
+				row.put("Quantity",quantity);
+				row.put("Issuer",author);
+				row.put("Comment",comment);
+				row.put("Due Date",due_date);
+				row.put("Overdue Interest",overdue);
+				row.put("Payment Method",paymentmethod);
+				row.put("Invoice No",invoice_no);
+				row.put("Unit Price",unit_price);
+				row.put("Product | Description",product);
+				row.put("Discount",discount);
+				analyticsData3.add(row);
+			}
+			newdata3 = list();
+			newdata3.add(analyticsData3);
+			info newdata3;
+			valuecrit3 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit3.toString(),"DATA":newdata3.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(4)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable4 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable4;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable4.get("data").get("viewId");
+			}
+			if(response_map4.get("status").equalsIgnoreCase("SUCCESS") && response_map4.get("list").size() > 0)
+			{
+				records4 = response_map4.get("list");
+			}
+			analyticsData4 = List();
+			for each  record4 in records4
+			{
+				project_id = record4.get("projectid");
+				date_of_issue = record4.get("dateofissue");
+				tax = record4.get("tax");
+				quantity = record4.get("quantity");
+				due_date = record4.get("duedate");
+				bill_no = record4.get("billno");
+				unit_price = record4.get("unitprice");
+				price_list = record4.get("pricelist").get("label");
+				comment = record4.get("comment");
+				issuer = record4.get("issuer");
+				issuer_first = issuer.get("first_name");
+				issuer_last = issuer.get("last_name");
+				if(issuer_last != null && issuer_last.trim() != "")
+				{
+					issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+				}
+				else
+				{
+					issuer_full = issuer_first.trim();
+				}
+				paymentmethod = record4.get("paymentmethod").get("label");
+				recipient = record4.get("recipient").get("label");
+				product = record4.get("product");
+				discount = record4.get("discount");
+				row = Map();
+				row.put("Bill No",bill_no);
+				row.put("Comment",comment);
+				row.put("Date of Issue",date_of_issue);
+				row.put("Discount",discount);
+				row.put("Due Date",due_date);
+				row.put("Issuer",issuer_full);
+				row.put("Payment Method",paymentmethod);
+				row.put("Price List",price_list);
+				row.put("Product | Description",product);
+				row.put("Project ID",project_id);
+				row.put("Quantity",quantity);
+				row.put("Recipient",recipient);
+				row.put("Unit Price",unit_price);
+				row.put("Tax Value",tax);
+				analyticsData4.add(row);
+			}
+			newdata4 = list();
+			newdata4.add(analyticsData4);
+			info newdata4;
+			valuecrit4 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit4.toString(),"DATA":newdata4.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+		else if(tablename.equalsIgnoreCase("(5)"))
+		{
+			viewcheck = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views"
+				type :GET
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewcheck;
+			viewtable = viewcheck.get("data").get("views");
+			viewExists = false;
+			for each  views in viewtable
+			{
+				if(views.get("viewName").equalsIgnoreCase(tablename))
+				{
+					viewExists = true;
+				}
+			}
+			if(viewExists == false)
+			{
+				addtable5 = invokeurl
+				[
+					url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/tables"
+					type :POST
+					parameters:{"CONFIG":addstable}
+					headers:{"ZANALYTICS-ORGID":orgId}
+					connection:"cliq_analytics"
+				];
+			}
+			info response;
+			info addtable5;
+			viewId = 0;
+			if(viewtable.size() == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			else
+			{
+				for each  val in viewtable
+				{
+					if(val.get("viewName") == tablename)
+					{
+						viewId = val.get("viewId");
+						break;
+					}
+				}
+			}
+			info viewId;
+			if(viewId == 0)
+			{
+				viewId = addtable5.get("data").get("viewId");
+			}
+			if(response_map5.get("status").equalsIgnoreCase("SUCCESS") && response_map5.get("list").size() > 0)
+			{
+				records5 = response_map5.get("list");
+			}
+			analyticsData5 = List();
+			for each  record5 in records5
+			{
+				condition = record5.get("condition").get("label");
+				activity = record5.get("activity").get("label");
+				duration = record5.get("duration");
+				title = record5.get("title");
+				due_date = record5.get("duedate");
+				start_date = record5.get("startdate");
+				description = record5.get("description");
+				priority = record5.get("priority").get("label");
+				users = record5.get("users");
+				users_first = users.get("first_name");
+				users_last = users.get("last_name");
+				taskno = record5.get("taskno");
+				if(users_last != null && users_last.trim() != "")
+				{
+					users_full = users_first.trim() + " " + users_last.trim();
+				}
+				else
+				{
+					users_full = users_first.trim();
+				}
+				row = Map();
+				row.put("Condition",condition);
+				row.put("Activity Type",activity);
+				row.put("Planned Duration",duration);
+				row.put("Title",title);
+				row.put("Start Date",start_date);
+				row.put("Due Date",due_date);
+				row.put("Priority",priority);
+				row.put("Description",description);
+				row.put("Users",users_full);
+				row.put("Task No",taskno);
+				analyticsData5.add(row);
+			}
+			newdata5 = list();
+			newdata5.add(analyticsData5);
+			info newdata5;
+			valuecrit5 = {"importType":"truncateadd","fileType":"json","autoIdentify":"true"};
+			addvalue = invokeurl
+			[
+				url :"https://analyticsapi.zoho.com/restapi/v2/workspaces/" + workid + "/views/" + viewId + "/data"
+				type :POST
+				parameters:{"CONFIG":valuecrit5.toString(),"DATA":newdata5.toString()}
+				headers:{"ZANALYTICS-ORGID":orgId}
+				connection:"cliq_analytics"
+			];
+			info viewId;
+			info addvalue;
+		}
+	}
+	// 6
+	return {"type":"applet","data_type":"web_view","tabs":{{"label":"Reports","id":"reports"}},"web_view":{"url":"https://analytics.zoho.com/open-view/2984669000000059305"},"active_tab":"reports"};
+}
+return response;

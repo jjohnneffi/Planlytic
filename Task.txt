@@ -1,0 +1,67 @@
+
+response = Map();
+query_map = Map();
+criteria_string = "taskno>=0";
+query_map.put("criteria",criteria_string);
+response_map = zoho.cliq.getRecords("taskdb",query_map);
+optionsList = list();
+if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+{
+	records = response_map.get("list");
+}
+response = Map();
+card = Map();
+card.put("icon","https://cdn-icons-png.flaticon.com/256/3195/3195148.png");
+card.put("theme","prompt");
+card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/3195/3195148.png");
+response.put("card",card);
+slidesList = list();
+slidesList0 = Map();
+slidesList0.put("type","table");
+// slidesList0.put("title","Client");
+data = Map();
+headersList = list();
+headersList.add("Task No");
+headersList.add("Title");
+headersList.add("Planned Duration");
+headersList.add("Start Date");
+headersList.add("Due Date");
+headersList.add("Activity Type");
+headersList.add("Priority");
+headersList.add("Condition");
+headersList.add("Description");
+headersList.add("Assigned to");
+data.put("headers",headersList);
+rowsList = list();
+if(records.size() > 0)
+{
+	for each  record in records
+	{
+		rowsList0 = Map();
+		rowsList0.put("Task No",record.get("taskno"));
+		rowsList0.put("Title",record.get("title"));
+		rowsList0.put("Planned Duration",record.get("duration"));
+		rowsList0.put("Start Date",record.get("startdate"));
+		rowsList0.put("Due Date",record.get("duedate"));
+		rowsList0.put("Activity Type",record.get("activity").get("label"));
+		rowsList0.put("Priority",record.get("priority").get("label"));
+		rowsList0.put("Condition",record.get("condition").get("label"));
+		rowsList0.put("Description",record.get("description"));
+		rowsList0.put("Assigned to",record.get("users").get("first_name"));
+		rowsList.add(rowsList0);
+		data.put("rows",rowsList);
+		slidesList0.put("data",data);
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view your scheduled tasks");
+}
+else if(records.size() == 0)
+{
+	response.put("text","No tasks available");
+	card = Map();
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/11696/11696716.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+}
+zoho.cliq.postToChannel("announcements",response);

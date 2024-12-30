@@ -1,0 +1,313 @@
+
+if(sub_action.equalsIgnoreCase("Projects"))
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/1087/1087815.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/1087/1087815.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Project Name");
+	headersList.add("Category");
+	headersList.add("Client");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Project Name",record.get("projectname"));
+			rowsList0.put("Category",record.get("category").get("label"));
+			rowsList0.put("Client",record.get("client").get("label"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateProject";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No project details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update project details");
+}
+else if(sub_action.equalsIgnoreCase("Quotes"))
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/11000/11000527.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/11000/11000527.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Quote No.");
+	headersList.add("Client");
+	headersList.add("Status");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Quote No.",record.get("quoteno"));
+			rowsList0.put("Client",record.get("client").get("label"));
+			rowsList0.put("Status",record.get("status").get("label"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateQuote";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No quote details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update quote details");
+}
+else if(sub_action.equalsIgnoreCase("Invoices"))
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/256/3756/3756412.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/3756/3756412.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Invoice No.");
+	headersList.add("Author");
+	headersList.add("Date of Issue");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Invoice No.",record.get("invoiceno"));
+			rowsList0.put("Author",record.get("author").get("first_name"));
+			rowsList0.put("Date of Issue",record.get("dateofissue"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateInvoice";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No invoice details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update invoice details");
+}
+else if(sub_action.equalsIgnoreCase("Bills"))
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/256/625/625603.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/625/625603.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Bill No.");
+	headersList.add("Recipient");
+	headersList.add("Date of Issue");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Bill No.",record.get("billno"));
+			rowsList0.put("Recipient",record.get("recipient").get("label"));
+			rowsList0.put("Date of Issue",record.get("dateofissue"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateBill";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No bill details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update bill details");
+}
+else if(sub_action.equalsIgnoreCase("Tasks"))
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Task No");
+	headersList.add("Title");
+	headersList.add("Planned Duration");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Task No",record.get("taskno"));
+			rowsList0.put("Title",record.get("title"));
+			rowsList0.put("Planned Duration",record.get("duration"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateTask";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No task details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update task details");
+}
+else
+{
+	banner = {"type":"banner","status":"failure","text":"Select one of the options from the sub-action menu."};
+	return banner;
+}
+return response;

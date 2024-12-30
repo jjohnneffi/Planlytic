@@ -1,0 +1,103 @@
+
+response = Map();
+user_email = user.get("email");
+query_map = Map();
+criteria_string = "projectid>=0";
+query_map.put("criteria",criteria_string);
+response_map = zoho.cliq.getRecords("projectdb",query_map);
+optionsList = list();
+if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+{
+	records = response_map.get("list");
+}
+response = Map();
+card = Map();
+card.put("icon","https://cdn-icons-png.flaticon.com/512/8759/8759045.png");
+card.put("theme","prompt");
+card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/8759/8759045.png");
+response.put("card",card);
+slidesList = list();
+slidesList0 = Map();
+slidesList0.put("type","table");
+// slidesList0.put("title","Client");
+data = Map();
+headersList = list();
+headersList.add("Project ID");
+headersList.add("Project Name");
+headersList.add("Category");
+headersList.add("Client");
+headersList.add("Start Date");
+headersList.add("Due Date");
+headersList.add("Status");
+headersList.add("Team Lead");
+headersList.add("Team Members");
+headersList.add("Total Hours");
+headersList.add("Total Budget");
+headersList.add("Labor Cost");
+headersList.add("Product Cost");
+headersList.add("Description");
+data.put("headers",headersList);
+rowsList = list();
+if(records.size() > 0)
+{
+	for each  record in records
+	{
+		rowsList0 = Map();
+		rowsList0.put("Project ID",record.get("projectid"));
+		rowsList0.put("Project Name",record.get("projectname"));
+		rowsList0.put("Category",record.get("category").get("label"));
+		rowsList0.put("Client",record.get("client").get("label"));
+		rowsList0.put("Start Date",record.get("startdate"));
+		rowsList0.put("Due Date",record.get("duedate"));
+		rowsList0.put("Status",record.get("status").get("label"));
+		team_lead = record.get("teamlead");
+		team_lead_first = team_lead.get("first_name");
+		team_lead_last = team_lead.get("last_name");
+		team_members = record.get("teammembers");
+		if(team_lead_last != null && team_lead_last.trim() != "")
+		{
+			team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+		}
+		else
+		{
+			team_lead_full = team_lead_first.trim();
+		}
+		mem_full = List();
+		for each  member in team_members
+		{
+			member_first = member.get("first_name");
+			member_last = member.get("last_name");
+			if(member_last != null && member_last.trim() != "")
+			{
+				member_full = member_first.trim() + " " + member_last.trim();
+			}
+			else
+			{
+				member_full = member_first.trim();
+			}
+			mem_full.add(member_full);
+		}
+		rowsList0.put("Team Lead",team_lead_full);
+		rowsList0.put("Team Members",mem_full);
+		rowsList0.put("Total Hours",record.get("totalhours"));
+		rowsList0.put("Total Budget",record.get("totalbudget"));
+		rowsList0.put("Labor Cost",record.get("laborcost"));
+		rowsList0.put("Product Cost",record.get("productcost"));
+		rowsList0.put("Description",record.get("description"));
+		rowsList.add(rowsList0);
+		data.put("rows",rowsList);
+		slidesList0.put("data",data);
+	}
+}
+else if(records.size() == 0)
+{
+	response.put("text","No project details found");
+	card = Map();
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+}
+slidesList.add(slidesList0);
+response.put("slides",slidesList);
+response.put("text","Click to view your assigned projects");
+zoho.cliq.postToChannel("announcements",response);

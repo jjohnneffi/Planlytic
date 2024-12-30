@@ -1,0 +1,2114 @@
+
+response = Map();
+if(target.get("id") == "createProject")
+{
+	response.put("type","form");
+	response.put("title","Add Project");
+	response.put("name","projectdatawidget");
+	response.put("hint","Fill in your project details");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Project ID");
+	inputsList0.put("name","projectid");
+	inputsList0.put("placeholder","Enter project id");
+	inputsList0.put("hint","Project ID should be unique for every record");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Project Name");
+	inputsList1.put("name","projectname");
+	inputsList1.put("placeholder","Enter project name");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","text");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Category");
+	inputsList2.put("name","category");
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","radio");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","work");
+	optionsList0.put("label","Work");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","personal");
+	optionsList1.put("label","Personal");
+	optionsList.add(optionsList1);
+	inputsList2.put("options",optionsList);
+	inputsList.add(inputsList2);
+	// 	inputsList3 = Map();
+	// 	inputsList3.put("label","Client");
+	// 	inputsList3.put("name","client");
+	// 	inputsList3.put("placeholder","Choose from the list of options");
+	// 	inputsList3.put("multiple",false);
+	// 	inputsList3.put("mandatory",false);
+	// 	inputsList3.put("type","select");
+	// 	optionsList = list();
+	// 	optionsList0 = Map();
+	// 	optionsList0.put("value","clienta");
+	// 	optionsList0.put("label","Client A");
+	// 	optionsList.add(optionsList0);
+	// 	optionsList1 = Map();
+	// 	optionsList1.put("value","clientb");
+	// 	optionsList1.put("label","Client B");
+	// 	optionsList.add(optionsList1);
+	// 	optionsList2 = Map();
+	// 	optionsList2.put("value","organisationa");
+	// 	optionsList2.put("label","Organisation A");
+	// 	optionsList.add(optionsList2);
+	// 	optionsList3 = Map();
+	// 	optionsList3.put("value","organisationb");
+	// 	optionsList3.put("label","Organisation B");
+	// 	optionsList.add(optionsList3);
+	// 	inputsList3.put("options",optionsList);
+	// 	inputsList.add(inputsList3);
+	inputsList3 = Map();
+	inputsList3.put("label","Client");
+	inputsList3.put("name","client");
+	inputsList3.put("placeholder","Choose from the list of options");
+	inputsList3.put("multiple",false);
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","select");
+	query_map = Map();
+	criteria_string = "regno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("name").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("name"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noclient");
+		option.put("label","No Clients Available");
+		optionsList.add(option);
+	}
+	inputsList3.put("options",optionsList);
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Start Date");
+	inputsList4.put("name","startdate");
+	inputsList4.put("placeholder","Choose start date");
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","date");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Due Date");
+	inputsList5.put("name","duedate");
+	inputsList5.put("placeholder","Choose due date");
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","date");
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Status");
+	inputsList6.put("name","status");
+	inputsList6.put("placeholder","Choose from the list of options");
+	inputsList6.put("multiple",false);
+	inputsList6.put("mandatory",true);
+	inputsList6.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","inprogress");
+	optionsList0.put("label","In Progress");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","onhold");
+	optionsList1.put("label","On Hold");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","pending");
+	optionsList2.put("label","Pending");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","canceled");
+	optionsList3.put("label","Canceled");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","completed");
+	optionsList4.put("label","Completed");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","tentative");
+	optionsList5.put("label","Tentative");
+	optionsList.add(optionsList5);
+	inputsList6.put("options",optionsList);
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Team Lead");
+	inputsList7.put("name","teamlead");
+	inputsList7.put("placeholder","Choose a lead from your team");
+	inputsList7.put("multiple",false);
+	inputsList7.put("mandatory",true);
+	inputsList7.put("type","native_select");
+	inputsList7.put("data_source","contacts");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Team Members");
+	inputsList8.put("name","teammembers");
+	inputsList8.put("placeholder","Choose members from your team");
+	inputsList8.put("multiple",true);
+	inputsList8.put("mandatory",true);
+	inputsList8.put("type","native_select");
+	inputsList8.put("data_source","contacts");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Total Hours");
+	inputsList9.put("name","totalhours");
+	inputsList9.put("placeholder","Enter expected time to complete the project");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Total Budget");
+	inputsList10.put("name","totalbudget");
+	inputsList10.put("placeholder","Enter expected budget to complete the project");
+	inputsList10.put("mandatory",false);
+	inputsList10.put("type","number");
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","Labor Cost");
+	inputsList11.put("name","laborcost");
+	inputsList11.put("placeholder","Enter labor cost to complete the project");
+	inputsList11.put("mandatory",false);
+	inputsList11.put("type","number");
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Product Cost");
+	inputsList12.put("name","productcost");
+	inputsList12.put("placeholder","Enter product cost to complete the project");
+	inputsList12.put("mandatory",false);
+	inputsList12.put("type","number");
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Description");
+	inputsList13.put("name","description");
+	inputsList13.put("placeholder","Deliver an insight about the project");
+	inputsList13.put("mandatory",false);
+	inputsList13.put("type","textarea");
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "deleteProject")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Project Deletion");
+	response.put("name","deleteprojectwidget");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Project Name");
+	inputsList0.put("name","projectname");
+	inputsList0.put("placeholder","Select the project name to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("projectname").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("projectname"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noprojects");
+		option.put("label","No Projects Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "createquote")
+{
+	response.put("type","form");
+	response.put("title","Add Quote");
+	response.put("name","quotedetailswidget");
+	response.put("hint","Enter quote details for your project");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Project ID");
+	inputsList0.put("name","projectid");
+	inputsList0.put("placeholder","Enter project id");
+	// inputsList0.put("min","0");
+	// inputsList0.put("max","100");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Quote No. ");
+	inputsList1.put("name","quoteno");
+	inputsList1.put("placeholder","Enter quote no.");
+	inputsList1.put("hint","Quote No should be unique for every record");
+	inputsList1.put("min_length","0");
+	inputsList1.put("max_length","25");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","text");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Client");
+	inputsList2.put("name","client");
+	inputsList2.put("placeholder","Choose from the list of options");
+	inputsList2.put("multiple",false);
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","select");
+	query_map = Map();
+	criteria_string = "regno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("name").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("name"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noclient");
+		option.put("label","No Clients Available");
+		optionsList.add(option);
+	}
+	inputsList2.put("options",optionsList);
+	inputsList.add(inputsList2);
+	// 	inputsList2 = Map();
+	// 	inputsList2.put("label","Client");
+	// 	inputsList2.put("name","client");
+	// 	inputsList2.put("placeholder","Choose from the list of options");
+	// 	inputsList2.put("multiple",false);
+	// 	inputsList2.put("mandatory",true);
+	// 	inputsList2.put("type","select");
+	// 	optionsList = list();
+	// 	optionsList0 = Map();
+	// 	optionsList0.put("value","clienta");
+	// 	optionsList0.put("label","Client A");
+	// 	optionsList.add(optionsList0);
+	// 	optionsList1 = Map();
+	// 	optionsList1.put("value","clientb");
+	// 	optionsList1.put("label","Client B");
+	// 	optionsList.add(optionsList1);
+	// 	optionsList2 = Map();
+	// 	optionsList2.put("value","organisationa");
+	// 	optionsList2.put("label","Organisation A");
+	// 	optionsList.add(optionsList2);
+	// 	optionsList3 = Map();
+	// 	optionsList3.put("value","organisationb");
+	// 	optionsList3.put("label","Organisation B");
+	// 	optionsList.add(optionsList3);
+	// 	inputsList2.put("options",optionsList);
+	// 	inputsList.add(inputsList2);
+	inputsList3 = Map();
+	inputsList3.put("label","Date of Issue");
+	inputsList3.put("name","dateofissue");
+	inputsList3.put("placeholder","Enter date of issue");
+	inputsList3.put("mandatory",false);
+	inputsList3.put("type","date");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Comment");
+	inputsList4.put("name","comment");
+	inputsList4.put("placeholder","Deliver the update or insight of the project");
+	// inputsList4.put("min_length","0");
+	// inputsList4.put("max_length","25");
+	inputsList4.put("mandatory",false);
+	inputsList4.put("type","textarea");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Product | Service");
+	inputsList5.put("name","product");
+	inputsList5.put("placeholder","Enter product or service");
+	// inputsList5.put("min_length","0");
+	// inputsList5.put("max_length","25");
+	inputsList5.put("mandatory",false);
+	inputsList5.put("type","text");
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Quantity");
+	inputsList6.put("name","quantity");
+	inputsList6.put("placeholder","Enter quantity");
+	// inputsList6.put("min","0");
+	// inputsList6.put("max","100");
+	inputsList6.put("mandatory",false);
+	inputsList6.put("type","number");
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Unit Price");
+	inputsList7.put("name","unitprice");
+	inputsList7.put("placeholder","Enter unit price value");
+	// inputsList7.put("min","0");
+	// inputsList7.put("max","100");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","number");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Discount");
+	inputsList8.put("name","discount");
+	inputsList8.put("placeholder","Enter discount (in %)");
+	// inputsList8.put("min","0");
+	// inputsList8.put("max","100");
+	inputsList8.put("mandatory",false);
+	inputsList8.put("type","number");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Tax Value");
+	inputsList9.put("name","taxvalue");
+	inputsList9.put("placeholder","Enter tax value (in %)");
+	// inputsList9.put("min","0");
+	// inputsList9.put("max","100");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Due Date");
+	inputsList10.put("name","duedate");
+	inputsList10.put("placeholder","Enter due date");
+	inputsList10.put("mandatory",false);
+	inputsList10.put("type","date");
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","Estimated Closing Date");
+	inputsList11.put("name","closedate");
+	inputsList11.put("placeholder","Enter estimated closing date");
+	inputsList11.put("mandatory",false);
+	inputsList11.put("type","date");
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Estimated duration");
+	inputsList12.put("name","duration");
+	inputsList12.put("placeholder","Enter estimated duration (in hours)");
+	// inputsList12.put("min_length","0");
+	// inputsList12.put("max_length","25");
+	inputsList12.put("mandatory",false);
+	inputsList12.put("type","text");
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Status");
+	inputsList13.put("name","status");
+	inputsList13.put("placeholder","Choose from the list of options");
+	inputsList13.put("multiple",false);
+	inputsList13.put("mandatory",true);
+	inputsList13.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","opportunity");
+	optionsList0.put("label","Opportunity");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","scoping");
+	optionsList1.put("label","Scoping");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","proposal");
+	optionsList2.put("label","Proposal");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","confirmed");
+	optionsList3.put("label","Confirmed");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","rejected");
+	optionsList4.put("label","Rejected");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","expired");
+	optionsList5.put("label","Expired");
+	optionsList.add(optionsList5);
+	optionsList6 = Map();
+	optionsList6.put("value","completed");
+	optionsList6.put("label","Completed");
+	optionsList.add(optionsList6);
+	inputsList13.put("options",optionsList);
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "deletequote")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Quote Deletion");
+	response.put("name","deletequotewidget");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Quote No");
+	inputsList0.put("name","quoteno");
+	inputsList0.put("placeholder","Select the quote no to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("quoteno"));
+			option.put("label",record.get("quoteno"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noquotes");
+		option.put("label","No Quotes Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "createInvoice")
+{
+	response.put("type","form");
+	response.put("title","Add Invoice");
+	response.put("name","invoicedetailswidget");
+	response.put("hint","Enter invoice details for your project");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Project ID");
+	inputsList0.put("name","projectid");
+	inputsList0.put("placeholder","Enter project id");
+	// inputsList0.put("min","0");
+	// inputsList0.put("max","100");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Invoice No.");
+	inputsList1.put("name","invoiceno");
+	inputsList1.put("placeholder","Enter invoice no.");
+	inputsList1.put("hint","Invoice No. should be unique for every record");
+	// inputsList1.put("min_length","0");
+	// inputsList1.put("max_length","25");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","text");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Author");
+	inputsList2.put("name","author");
+	inputsList2.put("placeholder","Enter author name");
+	inputsList2.put("multiple",false);
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","native_select");
+	inputsList2.put("data_source","contacts");
+	inputsList.add(inputsList2);
+	inputsList3 = Map();
+	inputsList3.put("label","Date of Issue");
+	inputsList3.put("name","dateofissue");
+	inputsList3.put("placeholder","Enter date of issue");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","date");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Due Date");
+	inputsList4.put("name","duedate");
+	inputsList4.put("placeholder","Enter due date (in days)");
+	// inputsList4.put("min_length","0");
+	// inputsList4.put("max_length","25");
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","text");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Payer");
+	inputsList5.put("name","payer");
+	inputsList5.put("placeholder","Choose from the list of options");
+	inputsList5.put("multiple",false);
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","select");
+	query_map = Map();
+	criteria_string = "regno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("name").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("name"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noclient");
+		option.put("label","No Clients Available");
+		optionsList.add(option);
+	}
+	inputsList5.put("options",optionsList);
+	inputsList.add(inputsList5);
+	// 	inputsList5 = Map();
+	// 	inputsList5.put("label","Payer");
+	// 	inputsList5.put("name","payer");
+	// 	inputsList5.put("placeholder","Choose from the list of options");
+	// 	inputsList5.put("multiple",false);
+	// 	inputsList5.put("mandatory",true);
+	// 	inputsList5.put("type","select");
+	// 	optionsList = list();
+	// 	optionsList0 = Map();
+	// 	optionsList0.put("value","clienta");
+	// 	optionsList0.put("label","Client A");
+	// 	optionsList.add(optionsList0);
+	// 	optionsList1 = Map();
+	// 	optionsList1.put("value","clientb");
+	// 	optionsList1.put("label","Client B");
+	// 	optionsList.add(optionsList1);
+	// 	optionsList2 = Map();
+	// 	optionsList2.put("value","organisationa");
+	// 	optionsList2.put("label","Organisation A");
+	// 	optionsList.add(optionsList2);
+	// 	optionsList3 = Map();
+	// 	optionsList3.put("value","organisationb");
+	// 	optionsList3.put("label","Organisation B");
+	// 	optionsList.add(optionsList3);
+	// 	inputsList5.put("options",optionsList);
+	// 	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Comment");
+	inputsList6.put("name","comment");
+	inputsList6.put("placeholder","Deliver the update or insight of the project");
+	// inputsList6.put("min_length","0");
+	// inputsList6.put("max_length","25");
+	inputsList6.put("mandatory",false);
+	inputsList6.put("type","textarea");
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Product | Service");
+	inputsList7.put("name","product");
+	inputsList7.put("placeholder","Enter product or service");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","text");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Quantity");
+	inputsList8.put("name","quantity");
+	inputsList8.put("placeholder","Enter quantity");
+	// inputsList8.put("min","0");
+	// inputsList8.put("max","100");
+	inputsList8.put("mandatory",false);
+	inputsList8.put("type","number");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Unit Price");
+	inputsList9.put("name","unitprice");
+	inputsList9.put("placeholder","Enter unit price");
+	// inputsList9.put("min","0");
+	// inputsList9.put("max","100");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Discount");
+	inputsList10.put("name","discount");
+	inputsList10.put("placeholder","Enter discount (in %)");
+	// inputsList10.put("min","0");
+	// inputsList10.put("max","100");
+	inputsList10.put("mandatory",false);
+	inputsList10.put("type","number");
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","Tax Value");
+	inputsList11.put("name","taxvalue");
+	inputsList11.put("placeholder","Enter tax value (in %)");
+	// inputsList11.put("min","0");
+	// inputsList11.put("max","100");
+	inputsList11.put("mandatory",false);
+	inputsList11.put("type","number");
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Payment Method");
+	inputsList12.put("name","paymentmethod");
+	inputsList12.put("placeholder","Choose from the list of options");
+	inputsList12.put("multiple",false);
+	inputsList12.put("mandatory",true);
+	inputsList12.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","banktransfer");
+	optionsList0.put("label","Bank Transfer");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","cash");
+	optionsList1.put("label","Cash");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","cardpayment");
+	optionsList2.put("label","Card Payment");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","barter");
+	optionsList3.put("label","Barter");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","credit");
+	optionsList4.put("label","Credit");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","check");
+	optionsList5.put("label","Check");
+	optionsList.add(optionsList5);
+	inputsList12.put("options",optionsList);
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Overdue Interest");
+	inputsList13.put("name","overdue");
+	inputsList13.put("placeholder","Enter overdue interest (in %)");
+	// inputsList13.put("min","0");
+	// inputsList13.put("max","100");
+	inputsList13.put("mandatory",true);
+	inputsList13.put("type","number");
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "deleteInvoice")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Invoice Deletion");
+	response.put("name","deleteinvoicewidget");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Invoice No");
+	inputsList0.put("name","invoiceno");
+	inputsList0.put("placeholder","Select the invoice no to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("invoiceno"));
+			option.put("label",record.get("invoiceno"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noinvoice");
+		option.put("label","No Invoices Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "createBill")
+{
+	response.put("type","form");
+	response.put("title","Add Bill");
+	response.put("name","billdetailswidget");
+	response.put("hint","Enter bill details for your project");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Project ID");
+	inputsList0.put("name","projectid");
+	inputsList0.put("placeholder","Enter project id");
+	// inputsList0.put("min","0");
+	// inputsList0.put("max","100");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Bill No.");
+	inputsList1.put("name","billno");
+	inputsList1.put("placeholder","Enter bill no.");
+	inputsList1.put("hint","Bill No. should be unique for every record");
+	// inputsList1.put("min","0");
+	// inputsList1.put("max","100");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","number");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Recipient");
+	inputsList2.put("name","recipient");
+	inputsList2.put("placeholder","Choose from the list of options");
+	inputsList2.put("multiple",false);
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","select");
+	query_map = Map();
+	criteria_string = "regno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("name").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("name"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noclient");
+		option.put("label","No Clients Available");
+		optionsList.add(option);
+	}
+	inputsList2.put("options",optionsList);
+	inputsList.add(inputsList2);
+	// 	inputsList2 = Map();
+	// 	inputsList2.put("label","Recipient");
+	// 	inputsList2.put("name","recipient");
+	// 	inputsList2.put("placeholder","Choose from the list of options");
+	// 	inputsList2.put("multiple",false);
+	// 	inputsList2.put("mandatory",true);
+	// 	inputsList2.put("type","select");
+	// 	optionsList = list();
+	// 	optionsList0 = Map();
+	// 	optionsList0.put("value","clienta");
+	// 	optionsList0.put("label","Client A");
+	// 	optionsList.add(optionsList0);
+	// 	optionsList1 = Map();
+	// 	optionsList1.put("value","clientb");
+	// 	optionsList1.put("label","Client B");
+	// 	optionsList.add(optionsList1);
+	// 	optionsList2 = Map();
+	// 	optionsList2.put("value","organisationa");
+	// 	optionsList2.put("label","Organisation A");
+	// 	optionsList.add(optionsList2);
+	// 	optionsList3 = Map();
+	// 	optionsList3.put("value","organisationb");
+	// 	optionsList3.put("label","Organisation B");
+	// 	optionsList.add(optionsList3);
+	// 	inputsList2.put("options",optionsList);
+	// 	inputsList.add(inputsList2);
+	inputsList3 = Map();
+	inputsList3.put("label","Date of Issue");
+	inputsList3.put("name","dateofissue");
+	inputsList3.put("placeholder","Enter date of issue");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","date");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Due Date");
+	inputsList4.put("name","duedate");
+	inputsList4.put("placeholder","Enter due date");
+	inputsList4.put("mandatory",false);
+	inputsList4.put("type","date");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Issuer");
+	inputsList5.put("name","issuer");
+	inputsList5.put("placeholder","Enter issuer name");
+	// inputsList5.put("min_length","0");
+	// inputsList5.put("max_length","25");
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","text");
+	inputsList5.put("type","native_select");
+	inputsList5.put("data_source","contacts");
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Comment");
+	inputsList6.put("name","comment");
+	inputsList6.put("placeholder","Provide bill details");
+	// inputsList6.put("min_length","0");
+	// inputsList6.put("max_length","25");
+	inputsList6.put("mandatory",false);
+	inputsList6.put("type","textarea");
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Product | Service");
+	inputsList7.put("name","product");
+	inputsList7.put("placeholder","Enter product or service");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","text");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Quantity");
+	inputsList8.put("name","quantity");
+	inputsList8.put("placeholder","Enter quantity");
+	// inputsList8.put("min","0");
+	// inputsList8.put("max","100");
+	inputsList8.put("mandatory",false);
+	inputsList8.put("type","number");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Unit Price");
+	inputsList9.put("name","unitprice");
+	inputsList9.put("placeholder","Enter unit price");
+	// inputsList9.put("min","0");
+	// inputsList9.put("max","100");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Payment Method");
+	inputsList10.put("name","paymentmethod");
+	inputsList10.put("placeholder","Choose from the list of options");
+	inputsList10.put("multiple",false);
+	inputsList10.put("mandatory",true);
+	inputsList10.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","BankTransfer");
+	optionsList0.put("label","Bank Transfer");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","Cash");
+	optionsList1.put("label","Cash");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","CardPayment");
+	optionsList2.put("label","Card Payment");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","Barter");
+	optionsList3.put("label","Barter");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","Check");
+	optionsList4.put("label","Check");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","Credit");
+	optionsList5.put("label","Credit");
+	optionsList.add(optionsList5);
+	inputsList10.put("options",optionsList);
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","Price List");
+	inputsList11.put("name","pricelist");
+	inputsList11.put("placeholder","Choose from the list of options");
+	inputsList11.put("multiple",false);
+	inputsList11.put("mandatory",true);
+	inputsList11.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","INR");
+	optionsList0.put("label","INR");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","StandardGBP");
+	optionsList1.put("label","Standard (GBP)");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","StandardUSD");
+	optionsList2.put("label","Standard (USD)");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","SpecialEUR");
+	optionsList3.put("label","Special (EUR)");
+	optionsList.add(optionsList3);
+	inputsList11.put("options",optionsList);
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Discount");
+	inputsList12.put("name","discount");
+	inputsList12.put("placeholder","Enter discount (in %)");
+	// inputsList12.put("min_length","0");
+	// inputsList12.put("max_length","25");
+	inputsList12.put("mandatory",false);
+	inputsList12.put("type","text");
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Tax");
+	inputsList13.put("name","tax");
+	inputsList13.put("placeholder","Enter tax (in %)");
+	// inputsList13.put("min","0");
+	// inputsList13.put("max","100");
+	inputsList13.put("mandatory",false);
+	inputsList13.put("type","number");
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "deleteBill")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Bill Deletion");
+	response.put("name","deletebillwidget");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Bill No");
+	inputsList0.put("name","billno");
+	inputsList0.put("placeholder","Select the bill no to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("billno"));
+			option.put("label",record.get("billno"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","nobill");
+		option.put("label","No Bills Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "createTask")
+{
+	response.put("type","form");
+	response.put("title","New Task");
+	response.put("name","newtaskwidget");
+	response.put("hint","Fill in your task details");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList9 = Map();
+	inputsList9.put("label","Task No.");
+	inputsList9.put("name","taskno");
+	inputsList9.put("placeholder","Enter your task no.");
+	inputsList9.put("hint","Task No. should be unique for every record");
+	inputsList9.put("mandatory",true);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList0 = Map();
+	inputsList0.put("label","Title");
+	inputsList0.put("name","title");
+	inputsList0.put("placeholder","Enter title");
+	// inputsList0.put("min_length","0");
+	// inputsList0.put("max_length","25");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","text");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Planned Duration");
+	inputsList1.put("name","duration");
+	inputsList1.put("placeholder","Enter duration (in hours)");
+	// inputsList1.put("min","0");
+	// inputsList1.put("max","100");
+	inputsList1.put("mandatory",false);
+	inputsList1.put("type","number");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Start Date");
+	inputsList2.put("name","startdate");
+	inputsList2.put("placeholder","Enter start date");
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","date");
+	inputsList.add(inputsList2);
+	inputsList3 = Map();
+	inputsList3.put("label","Due Date");
+	inputsList3.put("name","duedate");
+	inputsList3.put("placeholder","Enter due date");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","date");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Activity Type");
+	inputsList4.put("name","activity");
+	inputsList4.put("placeholder","Choose from the list of options");
+	inputsList4.put("multiple",false);
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","consultation");
+	optionsList0.put("label","Consultation");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","copywriting");
+	optionsList1.put("label","Copy Writing");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","Design");
+	optionsList2.put("label","Design");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","ProjectManagement");
+	optionsList3.put("label","Project Management");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","Research");
+	optionsList4.put("label","Research");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","Strategy");
+	optionsList5.put("label","Strategy");
+	optionsList.add(optionsList5);
+	inputsList4.put("options",optionsList);
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Priority");
+	inputsList5.put("name","priority");
+	inputsList5.put("placeholder","Choose the priority of the task");
+	inputsList5.put("multiple",false);
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","highpriority");
+	optionsList0.put("label","High Priority");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","mediumpriority");
+	optionsList1.put("label","Medium Priority");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","LowPriority");
+	optionsList2.put("label","Low Priority");
+	optionsList.add(optionsList2);
+	inputsList5.put("options",optionsList);
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Condition");
+	inputsList6.put("name","condition");
+	inputsList6.put("placeholder","Choose the condition of the task");
+	inputsList6.put("multiple",false);
+	inputsList6.put("mandatory",true);
+	inputsList6.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","planned");
+	optionsList0.put("label","Planned");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","attention");
+	optionsList1.put("label","Needs Attention");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","InProgress");
+	optionsList2.put("label","In Progress");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","Completed");
+	optionsList3.put("label","Completed");
+	optionsList.add(optionsList3);
+	inputsList6.put("options",optionsList);
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Description");
+	inputsList7.put("name","description");
+	inputsList7.put("placeholder","Describe your task");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","textarea");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Assigned to");
+	inputsList8.put("name","users");
+	inputsList8.put("placeholder","Enter assigned user");
+	inputsList8.put("multiple",false);
+	inputsList8.put("mandatory",true);
+	inputsList8.put("type","text");
+	inputsList8.put("type","native_select");
+	inputsList8.put("data_source","contacts");
+	inputsList.add(inputsList8);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "doneTask")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Select Tasks");
+	response.put("name","donetaskwidget");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Choose completed tasks");
+	inputsList0.put("name","select");
+	inputsList0.put("placeholder","Select the completed tasks");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "title!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("title").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("title"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","notask");
+		option.put("label","No Tasks Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "deleteTask")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Task Deletion");
+	response.put("name","deletetaskwidget");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Task Name");
+	inputsList0.put("name","title");
+	inputsList0.put("placeholder","Select the task name to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("title").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("title"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","notask");
+		option.put("label","No Tasks Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "backarchives")
+{
+	id = "archives";
+	sections = list();
+	tabsArr = {{"label":"Dashboard","id":"dashboard"},{"label":"Archives","id":"archives"},{"label":"Reports","id":"reports"},{"label":"Clients","id":"clients"},{"label":"Help","id":"help"}};
+	sections = list();
+	user_email = user.get("email");
+	imgUrls = {"https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	header = {"title":"Archives"};
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	proj_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records0 = response_map.get("list");
+	}
+	for each  record0 in records0
+	{
+		row0 = Map();
+		project_id = record0.get("projectid");
+		project_name = record0.get("projectname");
+		category = record0.get("category").get("label");
+		client = record0.get("client").get("label");
+		total_hours = record0.get("totalhours");
+		status = record0.get("status").get("label");
+		total_budget = record0.get("totalbudget");
+		due_date = record0.get("duedate");
+		product_cost = record0.get("productcost");
+		team_members = record0.get("teammembers");
+		labor_cost = record0.get("laborcost");
+		start_date = record0.get("startdate");
+		description = record0.get("description");
+		team_lead = record0.get("teamlead");
+		team_lead_first = team_lead.get("first_name");
+		team_lead_last = team_lead.get("last_name");
+		recordid0 = record0.get("id");
+		if(team_lead_last != null && team_lead_last.trim() != "")
+		{
+			team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+		}
+		else
+		{
+			team_lead_full = team_lead_first.trim();
+		}
+		mem_full = List();
+		for each  member in team_members
+		{
+			member_first = member.get("first_name");
+			member_last = member.get("last_name");
+			if(member_last != null && member_last.trim() != "")
+			{
+				member_full = member_first.trim() + " " + member_last.trim();
+			}
+			else
+			{
+				member_full = member_first.trim();
+			}
+			mem_full.add(member_full);
+		}
+		row0.put("Project ID",project_id);
+		row0.put("Project Name",project_name);
+		row0.put("Category",category);
+		row0.put("Client",client);
+		row0.put("Team Lead",team_lead_full);
+		row0.put("Team Members",mem_full);
+		row0.put("Total Hours",total_hours);
+		row0.put("Status",status);
+		row0.put("Total Budget",total_budget);
+		row0.put("Product Cost",product_cost);
+		row0.put("Labor Cost",labor_cost);
+		row0.put("Start Date",start_date);
+		row0.put("Due Date",due_date);
+		row0.put("Description",description);
+		row0.put("recordid0",recordid0);
+		proj_rows.add(row0);
+	}
+	dataList0 = list();
+	if(proj_rows.size() > 0)
+	{
+		for each  row0 in proj_rows
+		{
+			eachData0 = Map();
+			eachData0.put("title","Project Name");
+			eachData0.put("description",row0.get("Project Name"));
+			eachData0.put("image_url",imgUrls.get(0));
+			buttonList0 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row0.get("recordid0") + " " + "projectdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row0.get("recordid0") + " " + "projecteditwidget","emotion":"positive"}};
+			eachData0.put("buttons",buttonList0);
+			dataList0.add(eachData0);
+		}
+		elements0 = list();
+		elements0.add({"type":"title","text":"Projects"});
+		elements0.add({"type":"buttons","buttons":{{"label":"+  Projects","type":"invoke.function","name":"widgetForm","id":"createProject","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteProject","emotion":"negative"}}});
+		elements0.add({"type":"cards","data":dataList0,"style":{"view":"gallery","size":"small"}});
+		elements0.add({"type":"divider"});
+		sections.add({"id":1,"elements":elements0});
+	}
+	else
+	{
+		eachData0 = Map();
+		eachData0.put("title","No Records found!");
+		eachData0.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList0.add(eachData0);
+		elements0 = list();
+		elements0.add({"type":"title","text":"Projects"});
+		elements0.add({"type":"buttons","buttons":{{"label":"+  Projects","type":"invoke.function","name":"widgetForm","id":"createProject","emotion":"positive"}}});
+		elements0.add({"type":"cards","data":dataList0,"style":{"view":"gallery","size":"small"}});
+		elements0.add({"type":"divider"});
+		sections.add({"id":2,"elements":elements0});
+	}
+	imgUrls1 = {"https://images.pexels.com/photos/6963857/pexels-photo-6963857.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map1 = Map();
+	criteria_string = "quoteno!=''";
+	query_map1.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map1);
+	quot_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records1 = response_map.get("list");
+	}
+	for each  record1 in records1
+	{
+		row1 = Map();
+		project_id = record1.get("projectid");
+		date_of_issue = record1.get("dateofissue");
+		quote_no = record1.get("quoteno");
+		client = record1.get("client").get("label");
+		tax_value = record1.get("taxvalue");
+		quantity = record1.get("quantity");
+		close_date = record1.get("closedate");
+		duration = record1.get("duration");
+		status = record1.get("status").get("label");
+		comment = record1.get("comment");
+		due_date = record1.get("duedate");
+		unit_price = record1.get("unitprice");
+		product = record1.get("product");
+		discount = record1.get("discount");
+		recordid1 = record1.get("id");
+		row1.put("Project ID",project_id);
+		row1.put("Date of Issue",date_of_issue);
+		row1.put("Quote No",quote_no);
+		row1.put("Client",client);
+		row1.put("Tax Value",tax_value);
+		row1.put("Quantity",quantity);
+		row1.put("Close Date",close_date);
+		row1.put("Duration",duration);
+		row1.put("Status",status);
+		row1.put("Comment",comment);
+		row1.put("Due Date",due_date);
+		row1.put("Unit Price",unit_price);
+		row1.put("Product",product);
+		row1.put("Discount",discount);
+		row1.put("recordid1",recordid1);
+		quot_rows.add(row1);
+	}
+	dataList1 = list();
+	if(quot_rows.size() > 0)
+	{
+		for each  row1 in quot_rows
+		{
+			eachData1 = Map();
+			eachData1.put("title","Quote No");
+			eachData1.put("description",row1.get("Quote No"));
+			eachData1.put("image_url",imgUrls1.get(0));
+			buttonList1 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row1.get("recordid1") + " " + "quotedisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row1.get("recordid1") + " " + "quoteeditwidget","emotion":"positive"}};
+			eachData1.put("buttons",buttonList1);
+			dataList1.add(eachData1);
+		}
+		elements1 = list();
+		elements1.add({"type":"title","text":"Quotes"});
+		elements1.add({"type":"buttons","buttons":{{"label":"+  Quotes","type":"invoke.function","name":"widgetForm","id":"createquote","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deletequote","emotion":"negative"}}});
+		elements1.add({"type":"cards","data":dataList1,"style":{"view":"gallery","size":"small"}});
+		elements1.add({"type":"divider"});
+		sections.add({"id":3,"elements":elements1});
+	}
+	else
+	{
+		eachData1 = Map();
+		eachData1.put("title","No Records found!");
+		eachData1.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList1.add(eachData1);
+		elements1 = list();
+		elements1.add({"type":"title","text":"Quotes"});
+		elements1.add({"type":"buttons","buttons":{{"label":"+  Quotes","type":"invoke.function","name":"widgetForm","id":"createquote","emotion":"positive"}}});
+		elements1.add({"type":"cards","data":dataList1,"style":{"view":"gallery","size":"small"}});
+		elements1.add({"type":"divider"});
+		sections.add({"id":4,"elements":elements1});
+	}
+	imgUrls2 = {"https://images.pexels.com/photos/8872366/pexels-photo-8872366.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map2 = Map();
+	criteria_string = "invoiceno!=''";
+	query_map2.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map2);
+	invo_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records2 = response_map.get("list");
+	}
+	for each  record2 in records2
+	{
+		row2 = Map();
+		project_id = record2.get("projectid");
+		date_of_issue = record2.get("dateofissue");
+		payer = record2.get("payer").get("label");
+		tax_value = record2.get("taxvalue");
+		quantity = record2.get("quantity");
+		author = record2.get("author");
+		author_first = author.get("first_name");
+		author_last = author.get("last_name");
+		if(author_last != null && author_last.trim() != "")
+		{
+			author_full = author_first.trim() + " " + author_last.trim();
+		}
+		else
+		{
+			author_full = author_first.trim();
+		}
+		comment = record2.get("comment");
+		due_date = record2.get("duedate");
+		overdue = record2.get("overdue");
+		paymentmethod = record2.get("paymentmethod").get("label");
+		invoice_no = record2.get("invoiceno");
+		unit_price = record2.get("unitprice");
+		product = record2.get("product");
+		discount = record2.get("discount");
+		recordid2 = record2.get("id");
+		row2.put("Project ID",project_id);
+		row2.put("Invoice No",invoice_no);
+		row2.put("Date of Issue",date_of_issue);
+		row2.put("Payer",payer);
+		row2.put("Tax Value",tax_value);
+		row2.put("Quantity",quantity);
+		row2.put("Author",author_full);
+		row2.put("Comment",comment);
+		row2.put("Due Date",due_date);
+		row2.put("Overdue",overdue);
+		row2.put("Payment Method",paymentmethod);
+		row2.put("Unit Price",unit_price);
+		row2.put("Product",product);
+		row2.put("Discount",discount);
+		row2.put("recordid2",recordid2);
+		invo_rows.add(row2);
+	}
+	dataList2 = list();
+	if(invo_rows.size() > 0)
+	{
+		for each  row2 in invo_rows
+		{
+			eachData2 = Map();
+			eachData2.put("title","Invoice No");
+			eachData2.put("description",row2.get("Invoice No"));
+			eachData2.put("image_url",imgUrls2.get(0));
+			buttonList2 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row2.get("recordid2") + " " + "invoicedisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row2.get("recordid2") + " " + "invoiceeditwidget","emotion":"positive"}};
+			eachData2.put("buttons",buttonList2);
+			dataList2.add(eachData2);
+		}
+		elements2 = list();
+		elements2.add({"type":"title","text":"Invoices"});
+		elements2.add({"type":"buttons","buttons":{{"label":"+  Invoices","type":"invoke.function","name":"widgetForm","id":"createInvoice","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteInvoice","emotion":"negative"}}});
+		elements2.add({"type":"cards","data":dataList2,"style":{"view":"gallery","size":"small"}});
+		elements2.add({"type":"divider"});
+		sections.add({"id":5,"elements":elements2});
+	}
+	else
+	{
+		eachData2 = Map();
+		eachData2.put("title","No Records found!");
+		eachData2.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList2.add(eachData2);
+		elements2 = list();
+		elements2.add({"type":"title","text":"Invoices"});
+		elements2.add({"type":"buttons","buttons":{{"label":"+  Invoices","type":"invoke.function","name":"widgetForm","id":"createInvoice","emotion":"positive"}}});
+		elements2.add({"type":"cards","data":dataList2,"style":{"view":"gallery","size":"small"}});
+		elements2.add({"type":"divider"});
+		sections.add({"id":6,"elements":elements2});
+	}
+	imgUrls3 = {"https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map3 = Map();
+	criteria_string = "billno>=0";
+	query_map3.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map3);
+	bill_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records3 = response_map.get("list");
+	}
+	for each  record3 in records3
+	{
+		row3 = Map();
+		project_id = record3.get("projectid");
+		date_of_issue = record3.get("dateofissue");
+		tax = record3.get("tax");
+		quantity = record3.get("quantity");
+		due_date = record3.get("duedate");
+		bill_no = record3.get("billno");
+		unit_price = record3.get("unitprice");
+		price_list = record3.get("pricelist").get("label");
+		comment = record3.get("comment");
+		issuer = record3.get("issuer");
+		issuer_first = issuer.get("first_name");
+		issuer_last = issuer.get("last_name");
+		if(issuer_last != null && issuer_last.trim() != "")
+		{
+			issuer_full = issuer_first.trim() + " " + issuer_last.trim();
+		}
+		else
+		{
+			issuer_full = issuer_first.trim();
+		}
+		paymentmethod = record3.get("paymentmethod").get("label");
+		recipient = record3.get("recipient").get("label");
+		product = record3.get("product");
+		discount = record3.get("discount");
+		recordid3 = record3.get("id");
+		row3.put("Project ID",project_id);
+		row3.put("Date of Issue",date_of_issue);
+		row3.put("Tax",tax);
+		row3.put("Quantity",quantity);
+		row3.put("Due Date",due_date);
+		row3.put("Bill No",bill_no);
+		row3.put("Unit Price",unit_price);
+		row3.put("Price List",price_list);
+		row3.put("Comment",comment);
+		row3.put("Issuer",issuer_full);
+		row3.put("Payment Method",paymentmethod);
+		row3.put("Recipient",recipient);
+		row3.put("Product",product);
+		row3.put("Discount",discount);
+		row3.put("recordid3",recordid3);
+		bill_rows.add(row3);
+	}
+	dataList3 = list();
+	if(bill_rows.size() > 0)
+	{
+		for each  row3 in bill_rows
+		{
+			eachData3 = Map();
+			eachData3.put("title","Bill No");
+			eachData3.put("description",row3.get("Bill No"));
+			eachData3.put("image_url",imgUrls3.get(0));
+			buttonList3 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row3.get("recordid3") + " " + "billdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row3.get("recordid3") + " " + "billeditwidget","emotion":"positive"}};
+			eachData3.put("buttons",buttonList3);
+			dataList3.add(eachData3);
+		}
+		elements3 = list();
+		elements3.add({"type":"title","text":"Bills"});
+		elements3.add({"type":"buttons","buttons":{{"label":"+  Bills","type":"invoke.function","name":"widgetForm","id":"createBill","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteBill","emotion":"negative"}}});
+		elements3.add({"type":"cards","data":dataList3,"style":{"view":"gallery","size":"small"}});
+		elements3.add({"type":"divider"});
+		sections.add({"id":7,"elements":elements3});
+	}
+	else
+	{
+		eachData3 = Map();
+		eachData3.put("title","No Records found!");
+		eachData3.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList3.add(eachData3);
+		elements3 = list();
+		elements3.add({"type":"title","text":"Bills"});
+		elements3.add({"type":"buttons","buttons":{{"label":"+  Bills","type":"invoke.function","name":"widgetForm","id":"createBill","emotion":"positive"}}});
+		elements3.add({"type":"cards","data":dataList3,"style":{"view":"gallery","size":"small"}});
+		elements3.add({"type":"divider"});
+		sections.add({"id":8,"elements":elements3});
+	}
+	imgUrls4 = {"https://images.pexels.com/photos/3854816/pexels-photo-3854816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	query_map4 = Map();
+	criteria_string = "taskno>=0";
+	query_map4.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map4);
+	task_rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records4 = response_map.get("list");
+	}
+	for each  record4 in records4
+	{
+		row4 = Map();
+		condition = record4.get("condition").get("label");
+		activity = record4.get("activity").get("label");
+		duration = record4.get("duration");
+		title = record4.get("title");
+		due_date = record4.get("duedate");
+		start_date = record4.get("startdate");
+		description = record4.get("description");
+		priority = record4.get("priority").get("label");
+		users = record4.get("users");
+		users_first = users.get("first_name");
+		users_last = users.get("last_name");
+		taskno = record4.get("taskno");
+		if(users_last != null && users_last.trim() != "")
+		{
+			users_full = users_first.trim() + " " + users_last.trim();
+		}
+		else
+		{
+			users_full = users_first.trim();
+		}
+		recordid4 = record4.get("id");
+		row4.put("Condition",condition);
+		row4.put("Activity",activity);
+		row4.put("Duration",duration);
+		row4.put("Title",title);
+		row4.put("Start Date",start_date);
+		row4.put("Due Date",due_date);
+		row4.put("Priority",priority);
+		row4.put("Description",description);
+		row4.put("Users",users_full);
+		row4.put("Task No",taskno);
+		row4.put("recordid4",recordid4);
+		task_rows.add(row4);
+	}
+	dataList4 = list();
+	if(task_rows.size() > 0)
+	{
+		for each  row4 in task_rows
+		{
+			eachData4 = Map();
+			eachData4.put("title","Task Name");
+			eachData4.put("description",row4.get("Title"));
+			eachData4.put("image_url",imgUrls4.get(0));
+			buttonList4 = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row4.get("recordid4") + " " + "taskdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row4.get("recordid4") + " " + "taskeditwidget","emotion":"positive"}};
+			eachData4.put("buttons",buttonList4);
+			dataList4.add(eachData4);
+		}
+		elements4 = list();
+		elements4.add({"type":"title","text":"Task"});
+		elements4.add({"type":"buttons","buttons":{{"label":"+  Task","type":"invoke.function","name":"widgetForm","id":"createTask","emotion":"positive"},{"label":"✓  Done","type":"invoke.function","name":"widgetForm","id":"doneTask","emotion":"positive"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deleteTask","emotion":"negative"}}});
+		elements4.add({"type":"cards","data":dataList4,"style":{"view":"gallery","size":"small"}});
+		elements4.add({"type":"divider"});
+		sections.add({"id":9,"elements":elements4});
+	}
+	else
+	{
+		eachData4 = Map();
+		eachData4.put("title","No Records found!");
+		eachData4.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		dataList4.add(eachData4);
+		elements4 = list();
+		elements4.add({"type":"title","text":"Task"});
+		elements4.add({"type":"buttons","buttons":{{"label":"+  Task","type":"invoke.function","name":"widgetForm","id":"createTask","emotion":"positive"}}});
+		elements4.add({"type":"cards","data":dataList4,"style":{"view":"gallery","size":"small"}});
+		elements4.add({"type":"divider"});
+		sections.add({"id":10,"elements":elements4});
+	}
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+else if(target.get("id") == "newcontactwidget")
+{
+	response.put("type","form");
+	response.put("title","Add Contact");
+	response.put("name","contactdetailswidget");
+	response.put("hint","Fill in client contact details");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Contact ID");
+	inputsList0.put("name","contactid");
+	inputsList0.put("placeholder","Enter contact id");
+	inputsList0.put("hint","Contact ID should be unique for every record");
+	// inputsList0.put("min","0");
+	// inputsList0.put("max","100");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","number");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Company | Person");
+	inputsList1.put("name","name");
+	inputsList1.put("placeholder","Enter company or person name");
+	// inputsList1.put("min_length","0");
+	// inputsList1.put("max_length","25");
+	inputsList1.put("mandatory",true);
+	inputsList1.put("type","text");
+	inputsList.add(inputsList1);
+	inputsList3 = Map();
+	inputsList3.put("label","Email ID");
+	inputsList3.put("name","emailid");
+	inputsList3.put("placeholder","Enter email id");
+	// inputsList3.put("min_length","0");
+	// inputsList3.put("max_length","25");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","text");
+	inputsList3.put("format","email");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Website");
+	inputsList4.put("name","website");
+	inputsList4.put("placeholder","Enter website name");
+	// inputsList4.put("min_length","0");
+	// inputsList4.put("max_length","25");
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","text");
+	inputsList4.put("format","url");
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Category");
+	inputsList5.put("name","category");
+	inputsList5.put("placeholder","Choose from the list of options");
+	inputsList5.put("multiple",false);
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","vipclient");
+	optionsList0.put("label","A - VIP Client");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","standardclient");
+	optionsList1.put("label","B - Standard Client");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","exclient");
+	optionsList2.put("label","C - Ex - Client");
+	optionsList.add(optionsList2);
+	inputsList5.put("options",optionsList);
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Description");
+	inputsList6.put("name","description");
+	inputsList6.put("placeholder","Describe about the contact");
+	// inputsList6.put("min_length","0");
+	// inputsList6.put("max_length","25");
+	inputsList6.put("mandatory",false);
+	inputsList6.put("type","textarea");
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Address");
+	inputsList7.put("name","address");
+	inputsList7.put("placeholder","Enter address details");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","text");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Postal Code");
+	inputsList8.put("name","postalcode");
+	inputsList8.put("placeholder","Enter postal code");
+	// inputsList8.put("min","0");
+	// inputsList8.put("max","100");
+	inputsList8.put("mandatory",false);
+	inputsList8.put("type","number");
+	inputsList.add(inputsList8);
+	inputsList9 = Map();
+	inputsList9.put("label","Country");
+	inputsList9.put("name","country");
+	inputsList9.put("placeholder","Enter country name");
+	// inputsList9.put("min_length","0");
+	// inputsList9.put("max_length","25");
+	inputsList9.put("mandatory",false);
+	inputsList9.put("type","text");
+	inputsList.add(inputsList9);
+	inputsList10 = Map();
+	inputsList10.put("label","Time Zone");
+	inputsList10.put("name","timezone");
+	inputsList10.put("placeholder","Enter time zone");
+	inputsList10.put("multiple",false);
+	inputsList10.put("mandatory",true);
+	inputsList10.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","usa");
+	optionsList0.put("label","(GMT-05:00) Eastern Time (US & Canada)");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","uk");
+	optionsList1.put("label","(GMT+00:00) London");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","china");
+	optionsList2.put("label","(GMT+08:00) Beijing, Hong Kong");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","japan");
+	optionsList3.put("label","(GMT+09:00) Tokyo, Osaka, Sapporo");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","russia");
+	optionsList4.put("label","(GMT+03:00) Moscow, St. Petersburg");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","india");
+	optionsList5.put("label","(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi");
+	optionsList.add(optionsList5);
+	inputsList10.put("options",optionsList);
+	inputsList.add(inputsList10);
+	inputsList11 = Map();
+	inputsList11.put("label","ID Code");
+	inputsList11.put("name","idcode");
+	inputsList11.put("placeholder","Enter id code");
+	// inputsList11.put("min","0");
+	// inputsList11.put("max","100");
+	inputsList11.put("mandatory",false);
+	inputsList11.put("type","number");
+	inputsList.add(inputsList11);
+	inputsList12 = Map();
+	inputsList12.put("label","Reg No.");
+	inputsList12.put("name","regno");
+	inputsList12.put("placeholder","Enter registration number");
+	// inputsList12.put("min","0");
+	// inputsList12.put("max","100");
+	inputsList12.put("mandatory",false);
+	inputsList12.put("type","number");
+	inputsList.add(inputsList12);
+	inputsList13 = Map();
+	inputsList13.put("label","Tax | VAT No.");
+	inputsList13.put("name","taxno");
+	inputsList13.put("placeholder","Enter tax or VAT number");
+	// inputsList13.put("min","0");
+	// inputsList13.put("max","100");
+	inputsList13.put("mandatory",false);
+	inputsList13.put("type","number");
+	inputsList.add(inputsList13);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+}
+else if(target.get("id") == "deletecontactwidget")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","Contact Deletion");
+	response.put("name","deletewidgetcontact");
+	response.put("button_label","Delete");
+	inputsList = list();
+	inputsList0 = Map();
+	inputsList0.put("label","Contact Name");
+	inputsList0.put("name","name");
+	inputsList0.put("placeholder","Select the contact name to delete");
+	inputsList0.put("multiple",false);
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","select");
+	query_map = Map();
+	criteria_string = "name!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			option = Map();
+			option.put("value",record.get("name").toLowerCase().replaceAll(" ",""));
+			option.put("label",record.get("name"));
+			optionsList.add(option);
+		}
+	}
+	else
+	{
+		option = Map();
+		option.put("value","noclient");
+		option.put("label","No Clients Available");
+		optionsList.add(option);
+	}
+	inputsList0.put("options",optionsList);
+	// optionsList = list();
+	// optionsList0 = map();
+	// optionsList0.put("value","half_marathon");
+	// optionsList0.put("label","Half marathon");
+	// optionsList.add(optionsList0);
+	// optionsList1 = map();
+	// optionsList1.put("value","stage_races");
+	// optionsList1.put("label","Stage races");
+	// optionsList.add(optionsList1);
+	// inputsList0.put("options",optionsList);
+	inputsList.add(inputsList0);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(target.get("id") == "backclients")
+{
+	id = "clients";
+	sections = list();
+	tabsArr = {{"label":"Dashboard","id":"dashboard"},{"label":"Archives","id":"archives"},{"label":"Reports","id":"reports"},{"label":"Clients","id":"clients"},{"label":"Help","id":"help"}};
+	user_email = user.get("email");
+	imgUrls = {"https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"};
+	header = {"title":"Clients","buttons":{{"label":"+  New","type":"invoke.function","name":"widgetForm","id":"newcontactwidget"},{"label":"Delete","type":"invoke.function","name":"widgetForm","id":"deletecontactwidget"}}};
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	rows = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			row = Map();
+			name = record.get("name");
+			description = record.get("description");
+			regno = record.get("regno");
+			website = record.get("website");
+			emailid = record.get("emailid");
+			category = record.get("category");
+			category_label = category.get("label");
+			contactid = record.get("contactid");
+			country = record.get("country");
+			timezone = record.get("timezone");
+			timezone_label = timezone.get("label");
+			idcode = record.get("idcode");
+			postalcode = record.get("postalcode");
+			address = record.get("address");
+			recordid = record.get("id");
+			row.put("name",name);
+			row.put("description",description);
+			row.put("regno",regno);
+			row.put("website",website);
+			row.put("emailid",emailid);
+			row.put("category",category_label);
+			row.put("contactid",contactid);
+			row.put("country",country);
+			row.put("timezone",timezone_label);
+			row.put("idcode",idcode);
+			row.put("postalcode",postalcode);
+			row.put("address",address);
+			row.put("recordid",recordid);
+			rows.add(row);
+		}
+	}
+	dataList = list();
+	if(rows.size() == 0)
+	{
+		eachData1 = Map();
+		eachData1.put("image_url","https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+		eachData1.put("title","No Records found!");
+		dataList.add(eachData1);
+	}
+	else
+	{
+		for each  row in rows
+		{
+			eachData = Map();
+			eachData.put("title","Client Name");
+			eachData.put("description",row.get("name"));
+			eachData.put("image_url",imgUrls.get(0));
+			buttonList = {{"label":"Details","type":"invoke.function","name":"widgetcardForm","id":row.get("recordid") + " " + "contactdisplaywidget","emotion":"neutral"},{"label":"Edit","type":"invoke.function","name":"widgetcardForm","id":row.get("recordid") + " " + "contacteditwidget","emotion":"positive"}};
+			eachData.put("buttons",buttonList);
+			dataList.add(eachData);
+		}
+	}
+	elements = list();
+	elements.add({"type":"cards","data":dataList,"style":{"view":"gallery","size":"small"}});
+	elements.add({"type":"divider"});
+	sections = list();
+	sections.add({"id":2,"elements":elements});
+	return {"type":"applet","tabs":tabsArr,"active_tab":id,"sections":sections,"header":header};
+}
+return response;

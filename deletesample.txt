@@ -1,0 +1,193 @@
+
+response = Map();
+if(arguments == "-proj")
+{
+	response = Map();
+	response.put("text","Projects");
+	card = Map();
+	card.put("title","Confirm deletion");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9746/9746449.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+	buttonsList = list();
+	buttonsList0 = Map();
+	buttonsList0.put("label","Cancel");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","cancelsampleproject");
+	buttonsList0.put("action",action);
+	buttonsList0.put("arguments",arguments);
+	buttonsList.add(buttonsList0);
+	buttonsList1 = Map();
+	buttonsList1.put("label","Delete");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","deletesampleproject");
+	buttonsList1.put("action",action);
+	buttonsList1.put("arguments",arguments);
+	buttonsList.add(buttonsList1);
+	response.put("buttons",buttonsList);
+	return response;
+}
+else if(arguments == "-quote")
+{
+	response = Map();
+	response.put("text","Quotes");
+	card = Map();
+	card.put("title","Confirm deletion");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9746/9746449.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+	buttonsList = list();
+	buttonsList0 = Map();
+	buttonsList0.put("label","Cancel");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","cancelsamplequote");
+	buttonsList0.put("action",action);
+	buttonsList0.put("arguments",arguments);
+	buttonsList.add(buttonsList0);
+	buttonsList1 = Map();
+	buttonsList1.put("label","Delete");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","deletesamplequote");
+	buttonsList1.put("action",action);
+	buttonsList1.put("arguments",arguments);
+	buttonsList.add(buttonsList1);
+	response.put("buttons",buttonsList);
+	return response;
+}
+else if(arguments == "-invo")
+{
+	response = Map();
+	response.put("text","Invoices");
+	card = Map();
+	card.put("title","Confirm deletion");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9746/9746449.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+	buttonsList = list();
+	buttonsList0 = Map();
+	buttonsList0.put("label","Cancel");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","cancelsampleinvoice");
+	buttonsList0.put("action",action);
+	buttonsList0.put("arguments",arguments);
+	buttonsList.add(buttonsList0);
+	buttonsList1 = Map();
+	buttonsList1.put("label","Delete");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","deletesampleinvoice");
+	buttonsList1.put("action",action);
+	buttonsList1.put("arguments",arguments);
+	buttonsList.add(buttonsList1);
+	response.put("buttons",buttonsList);
+	return response;
+}
+else if(arguments == "-bill")
+{
+	response = Map();
+	response.put("text","Bills");
+	card = Map();
+	card.put("title","Confirm deletion");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9746/9746449.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+	buttonsList = list();
+	buttonsList0 = Map();
+	buttonsList0.put("label","Cancel");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","cancelsamplebill");
+	buttonsList0.put("action",action);
+	buttonsList0.put("arguments",arguments);
+	buttonsList.add(buttonsList0);
+	buttonsList1 = Map();
+	buttonsList1.put("label","Delete");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","deletesamplebill");
+	buttonsList1.put("action",action);
+	buttonsList1.put("arguments",arguments);
+	buttonsList.add(buttonsList1);
+	response.put("buttons",buttonsList);
+	return response;
+}
+else if(arguments == "-task")
+{
+	response = Map();
+	response.put("text","Tasks");
+	card = Map();
+	card.put("title","Confirm deletion");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9746/9746449.png");
+	card.put("theme","prompt");
+	response.put("card",card);
+	buttonsList = list();
+	buttonsList0 = Map();
+	buttonsList0.put("label","Cancel");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","cancelsampletask");
+	buttonsList0.put("action",action);
+	buttonsList0.put("arguments",arguments);
+	buttonsList.add(buttonsList0);
+	buttonsList1 = Map();
+	buttonsList1.put("label","Delete");
+	action = Map();
+	action.put("type","invoke.function");
+	data = Map();
+	data.put("name","deleteForm");
+	action.put("data",data);
+	arguments = Map();
+	arguments.put("val","deletesampletask");
+	buttonsList1.put("action",action);
+	buttonsList1.put("arguments",arguments);
+	buttonsList.add(buttonsList1);
+	response.put("buttons",buttonsList);
+	return response;
+}
+else
+{
+	banner = {"type":"banner","status":"failure","text":"Select a command option"};
+	return banner;
+}
+return response;

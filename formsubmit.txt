@@ -1,0 +1,1338 @@
+
+formName = form.get("name");
+if(formName.equalsIgnoreCase("projectdata"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("projectid") == formValues.get("projectid"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the project. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("projectname",formValues.get("projectname"));
+	values_map.put("category",formValues.get("category"));
+	values_map.put("client",formValues.get("client"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("status",formValues.get("status"));
+	values_map.put("teamlead",formValues.get("teamlead"));
+	values_map.put("teammembers",formValues.get("teammembers"));
+	if(formValues.get("totalhours") == "")
+	{
+		values_map.put("totalhours",0);
+	}
+	else
+	{
+		values_map.put("totalhours",formValues.get("totalhours"));
+	}
+	if(formValues.get("totalbudget") == "")
+	{
+		values_map.put("totalbudget",0);
+	}
+	else
+	{
+		values_map.put("totalbudget",formValues.get("totalbudget"));
+	}
+	if(formValues.get("laborcost") == "")
+	{
+		values_map.put("laborcost",0);
+	}
+	else
+	{
+		values_map.put("laborcost",formValues.get("laborcost"));
+	}
+	if(formValues.get("productcost") == "")
+	{
+		values_map.put("productcost",0);
+	}
+	else
+	{
+		values_map.put("productcost",formValues.get("productcost"));
+	}
+	if(formValues.get("description") == "")
+	{
+		values_map.put("description","-");
+	}
+	else
+	{
+		values_map.put("description",formValues.get("description"));
+	}
+	response_map = zoho.cliq.createRecord("projectdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Project ID*" + "\n" + values_map.get("projectid"));
+		card = Map();
+		card.put("title","Project Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/9730/9730481.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Project Name : " + values_map.get("projectname"));
+		dataList.add("Start Date : " + values_map.get("startdate"));
+		dataList.add("Due Date : " + values_map.get("duedate"));
+		dataList.add("Client : " + values_map.get("client").get("label"));
+		dataList.add("Category : " + values_map.get("category").get("label"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("quotedetails"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("quoteno") == formValues.get("quoteno"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the quote. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("quoteno",formValues.get("quoteno"));
+	values_map.put("client",formValues.get("client"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("duration",formValues.get("duration"));
+	values_map.put("closedate",formValues.get("closedate"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("status",formValues.get("status"));
+	response_map = zoho.cliq.createRecord("quotedb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Quote No*" + "\n" + values_map.get("quoteno"));
+		card = Map();
+		card.put("title","Quote Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/4388/4388554.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Project ID : " + values_map.get("projectid"));
+		dataList.add("Status : " + values_map.get("status").get("label"));
+		dataList.add("Client : " + values_map.get("client").get("label"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("invoicedetails"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("invoiceno") == formValues.get("invoiceno"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the invoice. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("invoiceno",formValues.get("invoiceno"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("payer",formValues.get("payer"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("author",formValues.get("author"));
+	values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	values_map.put("overdue",formValues.get("overdue"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	response_map = zoho.cliq.createRecord("invoicedb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Invoice No*" + "\n" + values_map.get("invoiceno"));
+		card = Map();
+		card.put("title","Invoice Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/6203/6203822.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Project ID : " + values_map.get("projectid"));
+		dataList.add("Date of Issue : " + values_map.get("dateofissue"));
+		dataList.add("Payer : " + values_map.get("payer").get("label"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("billdetails"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("billno") == formValues.get("billno"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the bill. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("billno",formValues.get("billno"));
+	values_map.put("tax",formValues.get("tax"));
+	values_map.put("pricelist",formValues.get("pricelist"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("recipient",formValues.get("recipient"));
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("issuer",formValues.get("issuer"));
+	values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	response_map = zoho.cliq.createRecord("billsdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Bill No*" + "\n" + values_map.get("billno"));
+		card = Map();
+		card.put("title","Bill Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7506/7506440.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Project ID : " + values_map.get("projectid"));
+		dataList.add("Recipient : " + values_map.get("recipient").get("label"));
+		dataList.add("Issuer : " + values_map.get("issuer").get("first_name"));
+		dataList.add("Date of Issue : " + values_map.get("dateofissue"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("newtask"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "taskno!=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("taskno") == formValues.get("taskno"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the task. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("condition",formValues.get("condition"));
+	values_map.put("activity",formValues.get("activity"));
+	values_map.put("duration",formValues.get("duration"));
+	values_map.put("users",formValues.get("users"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("title",formValues.get("title"));
+	values_map.put("priority",formValues.get("priority"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("description",formValues.get("description"));
+	values_map.put("taskno",formValues.get("taskno"));
+	response_map = zoho.cliq.createRecord("taskdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Task No*" + "\n" + values_map.get("taskno"));
+		card = Map();
+		card.put("title","Task Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/1935/1935482.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Start Date : " + values_map.get("startdate"));
+		dataList.add("Due Date : " + values_map.get("duedate"));
+		dataList.add("Activity Type : " + values_map.get("activity").get("label"));
+		dataList.add("Assigned to : " + values_map.get("users").get("first_name"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("contactdetails"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "contactid!=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("contactid") == formValues.get("contactid"))
+			{
+				response = Map();
+				response.put("text","Failed to submit the contact. \nPlease try again");
+				card = Map();
+				card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+				card.put("theme","prompt");
+				response.put("card",card);
+				return response;
+			}
+		}
+	}
+	values_map.put("regno",formValues.get("regno"));
+	values_map.put("website",formValues.get("website"));
+	values_map.put("name",formValues.get("name"));
+	values_map.put("emailid",formValues.get("emailid"));
+	values_map.put("category",formValues.get("category"));
+	values_map.put("contactid",formValues.get("contactid"));
+	values_map.put("country",formValues.get("country"));
+	values_map.put("timezone",formValues.get("timezone"));
+	values_map.put("taxno",formValues.get("taxno"));
+	values_map.put("idcode",formValues.get("idcode"));
+	values_map.put("postalcode",formValues.get("postalcode"));
+	values_map.put("address",formValues.get("address"));
+	values_map.put("description",formValues.get("description"));
+	response_map = zoho.cliq.createRecord("contactdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		response = Map();
+		response.put("text","*Contact ID*" + "\n" + values_map.get("contactid"));
+		card = Map();
+		card.put("title","Contact Saved");
+		card.put("theme","modern-inline");
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/1935/1935165.png");
+		response.put("card",card);
+		slidesList = list();
+		slidesList0 = Map();
+		slidesList0.put("type","list");
+		dataList = list();
+		dataList.add("Company | Person : " + values_map.get("name"));
+		dataList.add("Email ID : " + values_map.get("emailid"));
+		dataList.add("Website : " + values_map.get("website"));
+		dataList.add("Category : " + values_map.get("category").get("label"));
+		slidesList0.put("data",dataList);
+		slidesList.add(slidesList0);
+		response.put("slides",slidesList);
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("projectdatawidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("projectid") == formValues.get("projectid"))
+			{
+				banner = {"text":"Failed to submit the project! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("projectname",formValues.get("projectname"));
+	values_map.put("category",formValues.get("category"));
+	values_map.put("client",formValues.get("client"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("status",formValues.get("status"));
+	values_map.put("teamlead",formValues.get("teamlead"));
+	values_map.put("teammembers",formValues.get("teammembers"));
+	if(formValues.get("totalhours") == "")
+	{
+		values_map.put("totalhours",0);
+	}
+	else
+	{
+		values_map.put("totalhours",formValues.get("totalhours"));
+	}
+	if(formValues.get("totalbudget") == "")
+	{
+		values_map.put("totalbudget",0);
+	}
+	else
+	{
+		values_map.put("totalbudget",formValues.get("totalbudget"));
+	}
+	if(formValues.get("laborcost") == "")
+	{
+		values_map.put("laborcost",0);
+	}
+	else
+	{
+		values_map.put("laborcost",formValues.get("laborcost"));
+	}
+	if(formValues.get("productcost") == "")
+	{
+		values_map.put("productcost",0);
+	}
+	else
+	{
+		values_map.put("productcost",formValues.get("productcost"));
+	}
+	if(formValues.get("description") == "")
+	{
+		values_map.put("description","-");
+	}
+	else
+	{
+		values_map.put("description",formValues.get("description"));
+	}
+	response_map = zoho.cliq.createRecord("projectdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Project saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("deleteprojectwidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("projectname",formValues.get("projectname"));
+	projectname = values_map.get("projectname").get("value");
+	query_map = Map();
+	criteria_string = "projectname==" + projectname;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("projectdb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Selected project deleted!","status":"success","type":"banner"};
+		}
+		else
+		{
+			banner = {"text":"Failed to delete project!","status":"failure","type":"banner"};
+		}
+	}
+	else
+	{
+		banner = {"text":"No records found","status":"failure","type":"banner"};
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("projectupdatewidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("projectname",formValues.get("projectname"));
+	if(formValues.get("category").size() != 0)
+	{
+		values_map.put("category",formValues.get("category"));
+	}
+	if(formValues.get("client").size() != 0)
+	{
+		values_map.put("client",formValues.get("client"));
+	}
+	if(formValues.get("status").size() != 0)
+	{
+		values_map.put("status",formValues.get("status"));
+	}
+	if(formValues.get("teamlead").size() != 0)
+	{
+		values_map.put("teamlead",formValues.get("teamlead"));
+	}
+	if(formValues.get("teammembers").size() != 0)
+	{
+		values_map.put("teammembers",formValues.get("teammembers"));
+	}
+	values_map.put("laborcost",formValues.get("laborcost"));
+	values_map.put("productcost",formValues.get("productcost"));
+	values_map.put("description",formValues.get("description"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("totalhours",formValues.get("totalhours"));
+	values_map.put("totalbudget",formValues.get("totalbudget"));
+	query_map = Map();
+	criteria_string = "projectid==" + formValues.get("projectid");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("projectdb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"type":"banner","status":"success","text":"Project details have been updated!"};
+			return banner;
+		}
+		else
+		{
+			banner = {"type":"banner","status":"failure","text":"Failed to update the project! Please try again"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Project not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("quotedetailswidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("quoteno") == formValues.get("quoteno"))
+			{
+				banner = {"text":"Failed to submit the quote! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("quoteno",formValues.get("quoteno"));
+	values_map.put("client",formValues.get("client"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("duration",formValues.get("duration"));
+	values_map.put("closedate",formValues.get("closedate"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("status",formValues.get("status"));
+	response_map = zoho.cliq.createRecord("quotedb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Quote saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("deletequotewidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("quoteno",formValues.get("quoteno"));
+	quoteno = values_map.get("quoteno").get("value");
+	query_map = Map();
+	criteria_string = "quoteno==" + quoteno;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("quotedb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Selected quote deleted!","status":"success","type":"banner"};
+		}
+		else
+		{
+			banner = {"text":"Failed to delete quote!","status":"failure","type":"banner"};
+		}
+	}
+	else
+	{
+		banner = {"text":"No records found!","status":"failure","type":"banner"};
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("quoteupdatewidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("quoteno",formValues.get("quoteno"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("closedate",formValues.get("closedate"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("quantity",formValues.get("quantity"));
+	if(formValues.get("client").size() != 0)
+	{
+		values_map.put("client",formValues.get("client"));
+	}
+	if(formValues.get("status").size() != 0)
+	{
+		values_map.put("status",formValues.get("status"));
+	}
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("duration",formValues.get("duration"));
+	query_map = Map();
+	criteria_string = "quoteno==" + formValues.get("quoteno");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("quotedb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"type":"banner","status":"success","text":"Quote details have been updated!"};
+			return banner;
+		}
+		else
+		{
+			banner = {"type":"banner","status":"failure","text":"Failed to update the quote! Please try again"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Quote not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("invoicedetailswidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("invoiceno") == formValues.get("invoiceno"))
+			{
+				banner = {"text":"Failed to submit the invoice! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("invoiceno",formValues.get("invoiceno"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("payer",formValues.get("payer"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("author",formValues.get("author"));
+	values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	values_map.put("overdue",formValues.get("overdue"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	response_map = zoho.cliq.createRecord("invoicedb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Invoice saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("deleteinvoicewidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("invoiceno",formValues.get("invoiceno"));
+	invoiceno = values_map.get("invoiceno").get("value");
+	query_map = Map();
+	criteria_string = "invoiceno==" + invoiceno;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("invoicedb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Selected invoice deleted!","status":"success","type":"banner"};
+			return banner;
+		}
+		else
+		{
+			banner = {"text":"Failed to delete invoice!","status":"failure","type":"banner"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Invoice not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("invoiceupdatewidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("invoiceno",formValues.get("invoiceno"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("taxvalue",formValues.get("taxvalue"));
+	values_map.put("overdue",formValues.get("overdue"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	if(formValues.get("author").size() != 0)
+	{
+		values_map.put("author",formValues.get("author"));
+	}
+	if(formValues.get("payer").size() != 0)
+	{
+		values_map.put("payer",formValues.get("payer"));
+	}
+	if(formValues.get("paymentmethod").size() != 0)
+	{
+		values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	}
+	query_map = Map();
+	criteria_string = "invoiceno==" + formValues.get("invoiceno");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("invoicedb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"type":"banner","status":"success","text":"Invoice details have been updated!"};
+			return banner;
+		}
+		else
+		{
+			banner = {"type":"banner","status":"failure","text":"Failed to update the invoice! Please try again"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Invoice not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("billdetailswidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("billno") == formValues.get("billno"))
+			{
+				banner = {"text":"Failed to submit the bill! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("billno",formValues.get("billno"));
+	values_map.put("tax",formValues.get("tax"));
+	values_map.put("pricelist",formValues.get("pricelist"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("recipient",formValues.get("recipient"));
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("issuer",formValues.get("issuer"));
+	values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("product",formValues.get("product"));
+	values_map.put("discount",formValues.get("discount"));
+	response_map = zoho.cliq.createRecord("billsdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Bill saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return response;
+}
+else if(formName.equalsIgnoreCase("deletebillwidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("billno",formValues.get("billno"));
+	billno = values_map.get("billno").get("value");
+	query_map = Map();
+	criteria_string = "billno==" + billno;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("billsdb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Selected bill deleted!","status":"success","type":"banner"};
+			return banner;
+		}
+		else
+		{
+			banner = {"text":"Failed to delete bill!","status":"failure","type":"banner"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Bill not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("billupdatewidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("projectid",formValues.get("projectid"));
+	values_map.put("billno",formValues.get("billno"));
+	values_map.put("dateofissue",formValues.get("dateofissue"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("quantity",formValues.get("quantity"));
+	values_map.put("unitprice",formValues.get("unitprice"));
+	values_map.put("tax",formValues.get("tax"));
+	if(formValues.get("recipient").size() != 0)
+	{
+		values_map.put("recipient",formValues.get("recipient"));
+	}
+	if(formValues.get("issuer").size() != 0)
+	{
+		values_map.put("issuer",formValues.get("issuer"));
+	}
+	values_map.put("comment",formValues.get("comment"));
+	values_map.put("product",formValues.get("product"));
+	if(formValues.get("paymentmethod").size() != 0)
+	{
+		values_map.put("paymentmethod",formValues.get("paymentmethod"));
+	}
+	if(formValues.get("pricelist").size() != 0)
+	{
+		values_map.put("pricelist",formValues.get("pricelist"));
+	}
+	values_map.put("discount",formValues.get("discount"));
+	// query_map = Map();
+	// criteria_string = "projectid>=0";
+	// query_map.put("criteria",criteria_string);
+	// response_map = zoho.cliq.getRecords("billsdb",query_map);
+	// record_id = 0;
+	// if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	// {
+	// 	record_id = response_map.get("list").get(0).get("id");
+	// }
+	// if(record_id.length() > 0)
+	// {
+	// 	update_response = zoho.cliq.updateRecord("billsdb",record_id,values_map);
+	// 	if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+	// 	{
+	// 		response.put("text","Bill updated successfully!👍");
+	// 	}
+	// 	else
+	// 	{
+	// 		response.put("text","Failed to update the bill. Please try again.😓");
+	// 	}
+	// }
+	// else
+	// {
+	// 	response.put("text","Bill not found.🧐");
+	// }
+	// return response;
+	query_map = Map();
+	criteria_string = "billno==" + formValues.get("billno");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("billsdb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"type":"banner","status":"success","text":"Bill details have been updated!"};
+			return banner;
+		}
+		else
+		{
+			banner = {"type":"banner","status":"failure","text":"Failed to update the bill! Please try again"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Bill not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("newtaskwidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "taskno!=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("taskno") == formValues.get("taskno"))
+			{
+				banner = {"text":"Failed to submit the task! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("condition",formValues.get("condition"));
+	values_map.put("activity",formValues.get("activity"));
+	values_map.put("duration",formValues.get("duration"));
+	values_map.put("users",formValues.get("users"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("title",formValues.get("title"));
+	values_map.put("priority",formValues.get("priority"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("description",formValues.get("description"));
+	values_map.put("taskno",formValues.get("taskno"));
+	response_map = zoho.cliq.createRecord("taskdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Task saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("donetaskwidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	today_date = zoho.currentdate.toString("yyyy-MM-dd");
+	info today_date;
+	values_map.put("condition",{"label":"Completed","value":"Completed"});
+	values_map.put("duedate",today_date);
+	query_map = Map();
+	criteria_string = "title==" + formValues.get("select").get("label");
+	info criteria_string;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("taskdb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Task details have been updated!","status":"success","type":"banner"};
+			return banner;
+		}
+		else
+		{
+			banner = {"text":"Failed to update the task! Please try again","status":"failure","type":"banner"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"text":"Task not found!","status":"failure","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("deletetaskwidget"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("title",formValues.get("title"));
+	title = values_map.get("title").get("value");
+	query_map = Map();
+	criteria_string = "title==" + title;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("taskdb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Selected task deleted!","status":"success","type":"banner"};
+			return banner;
+		}
+		else
+		{
+			banner = {"text":"Failed to delete task!","status":"failure","type":"banner"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Task not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("updatetaskwidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("title",formValues.get("title"));
+	values_map.put("duration",formValues.get("duration"));
+	values_map.put("startdate",formValues.get("startdate"));
+	values_map.put("duedate",formValues.get("duedate"));
+	values_map.put("description",formValues.get("description"));
+	values_map.put("taskno",formValues.get("taskno"));
+	if(formValues.get("activity").size() != 0)
+	{
+		values_map.put("activity",formValues.get("activity"));
+	}
+	if(formValues.get("priority").size() != 0)
+	{
+		values_map.put("priority",formValues.get("priority"));
+	}
+	if(formValues.get("condition").size() != 0)
+	{
+		values_map.put("condition",formValues.get("condition"));
+	}
+	if(formValues.get("users").size() != 0)
+	{
+		values_map.put("users",formValues.get("users"));
+	}
+	query_map = Map();
+	criteria_string = "taskno==" + formValues.get("taskno");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("taskdb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"type":"banner","status":"success","text":"Task details have been updated!"};
+			return banner;
+		}
+		else
+		{
+			banner = {"type":"banner","status":"failure","text":"Failed to update the task! Please try again"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"type":"banner","status":"failure","text":"Task not found!"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("contactdetailswidget"))
+{
+	response_map = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	query_map = Map();
+	criteria_string = "contactid!=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		for each  record in records
+		{
+			if(record.get("contactid") == formValues.get("contactid"))
+			{
+				banner = {"text":"Failed to submit the contact! Please try again","status":"failure","type":"banner"};
+				return banner;
+			}
+		}
+	}
+	values_map.put("regno",formValues.get("regno"));
+	values_map.put("website",formValues.get("website"));
+	values_map.put("name",formValues.get("name"));
+	values_map.put("emailid",formValues.get("emailid"));
+	values_map.put("category",formValues.get("category"));
+	values_map.put("contactid",formValues.get("contactid"));
+	values_map.put("country",formValues.get("country"));
+	values_map.put("timezone",formValues.get("timezone"));
+	values_map.put("taxno",formValues.get("taxno"));
+	values_map.put("idcode",formValues.get("idcode"));
+	values_map.put("postalcode",formValues.get("postalcode"));
+	values_map.put("address",formValues.get("address"));
+	values_map.put("description",formValues.get("description"));
+	response_map = zoho.cliq.createRecord("contactdb",values_map);
+	if(response_map.get("status") != "success")
+	{
+		banner = {"text":"Contact saved!","status":"success","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("deletewidgetcontact"))
+{
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("name",formValues.get("name"));
+	name = formValues.get("name").get("label");
+	query_map = Map();
+	criteria_string = "name==" + name;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null)
+	{
+		deleteResponse = zoho.cliq.deleteRecord("contactdb",record_id);
+		if(deleteResponse.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Contact details have been deleted!","status":"success","type":"banner"};
+		}
+		else
+		{
+			banner = {"text":"Failed to delete contact!","status":"failure","type":"banner"};
+		}
+	}
+	else
+	{
+		banner = {"text":"No records found!","status":"failure","type":"banner"};
+	}
+	return banner;
+}
+else if(formName.equalsIgnoreCase("saveupdatecontactwidget"))
+{
+	response = Map();
+	formValues = form.get("values");
+	values_map = Map();
+	values_map.put("contactid",formValues.get("contactid"));
+	values_map.put("name",formValues.get("name"));
+	values_map.put("regno",formValues.get("regno"));
+	values_map.put("idcode",formValues.get("idcode"));
+	values_map.put("postalcode",formValues.get("postalcode"));
+	values_map.put("country",formValues.get("country"));
+	values_map.put("website",formValues.get("website"));
+	values_map.put("emailid",formValues.get("emailid"));
+	values_map.put("taxno",formValues.get("taxno"));
+	values_map.put("address",formValues.get("address"));
+	values_map.put("description",formValues.get("description"));
+	if(formValues.get("category").size() != 0)
+	{
+		values_map.put("category",formValues.get("category"));
+	}
+	if(formValues.get("timezone").size() != 0)
+	{
+		values_map.put("timezone",formValues.get("timezone"));
+	}
+	query_map = Map();
+	criteria_string = "contactid==" + formValues.get("contactid");
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id.length() > 0)
+	{
+		update_response = zoho.cliq.updateRecord("contactdb",record_id,values_map);
+		if(update_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			banner = {"text":"Contact details have been updated!","status":"success","type":"banner"};
+			return banner;
+		}
+		else
+		{
+			banner = {"text":"Failed to update the contact! Please try again","status":"failure","type":"banner"};
+			return banner;
+		}
+	}
+	else
+	{
+		banner = {"text":"Contact not found!","status":"failure","type":"banner"};
+		return banner;
+	}
+	return banner;
+}
+return response;

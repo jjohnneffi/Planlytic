@@ -1,0 +1,361 @@
+
+response = Map();
+if(arguments == "-add")
+{
+	response = Map();
+	response.put("type","form");
+	response.put("title","New Task");
+	response.put("name","newtask");
+	response.put("hint","Fill in your task details");
+	response.put("button_label","Submit");
+	inputsList = list();
+	inputsList9 = Map();
+	inputsList9.put("label","Task No.");
+	inputsList9.put("name","taskno");
+	inputsList9.put("placeholder","Enter your task no.");
+	inputsList9.put("hint","Task No. should be unique for every record");
+	inputsList9.put("mandatory",true);
+	inputsList9.put("type","number");
+	inputsList.add(inputsList9);
+	inputsList0 = Map();
+	inputsList0.put("label","Title");
+	inputsList0.put("name","title");
+	inputsList0.put("placeholder","Enter title");
+	// inputsList0.put("min_length","0");
+	// inputsList0.put("max_length","25");
+	inputsList0.put("mandatory",true);
+	inputsList0.put("type","text");
+	inputsList.add(inputsList0);
+	inputsList1 = Map();
+	inputsList1.put("label","Planned Duration");
+	inputsList1.put("name","duration");
+	inputsList1.put("placeholder","Enter duration (in hours)");
+	// inputsList1.put("min","0");
+	// inputsList1.put("max","100");
+	inputsList1.put("mandatory",false);
+	inputsList1.put("type","number");
+	inputsList.add(inputsList1);
+	inputsList2 = Map();
+	inputsList2.put("label","Start Date");
+	inputsList2.put("name","startdate");
+	inputsList2.put("placeholder","Enter start date");
+	inputsList2.put("mandatory",true);
+	inputsList2.put("type","date");
+	inputsList.add(inputsList2);
+	inputsList3 = Map();
+	inputsList3.put("label","Due Date");
+	inputsList3.put("name","duedate");
+	inputsList3.put("placeholder","Enter due date");
+	inputsList3.put("mandatory",true);
+	inputsList3.put("type","date");
+	inputsList.add(inputsList3);
+	inputsList4 = Map();
+	inputsList4.put("label","Activity Type");
+	inputsList4.put("name","activity");
+	inputsList4.put("placeholder","Choose from the list of options");
+	inputsList4.put("multiple",false);
+	inputsList4.put("mandatory",true);
+	inputsList4.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","consultation");
+	optionsList0.put("label","Consultation");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","copywriting");
+	optionsList1.put("label","Copy Writing");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","Design");
+	optionsList2.put("label","Design");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","ProjectManagement");
+	optionsList3.put("label","Project Management");
+	optionsList.add(optionsList3);
+	optionsList4 = Map();
+	optionsList4.put("value","Research");
+	optionsList4.put("label","Research");
+	optionsList.add(optionsList4);
+	optionsList5 = Map();
+	optionsList5.put("value","Strategy");
+	optionsList5.put("label","Strategy");
+	optionsList.add(optionsList5);
+	inputsList4.put("options",optionsList);
+	inputsList.add(inputsList4);
+	inputsList5 = Map();
+	inputsList5.put("label","Priority");
+	inputsList5.put("name","priority");
+	inputsList5.put("placeholder","Choose the priority of the task");
+	inputsList5.put("multiple",false);
+	inputsList5.put("mandatory",true);
+	inputsList5.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","highpriority");
+	optionsList0.put("label","High Priority");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","mediumpriority");
+	optionsList1.put("label","Medium Priority");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","LowPriority");
+	optionsList2.put("label","Low Priority");
+	optionsList.add(optionsList2);
+	inputsList5.put("options",optionsList);
+	inputsList.add(inputsList5);
+	inputsList6 = Map();
+	inputsList6.put("label","Condition");
+	inputsList6.put("name","condition");
+	inputsList6.put("placeholder","Choose the condition of the task");
+	inputsList6.put("multiple",false);
+	inputsList6.put("mandatory",true);
+	inputsList6.put("type","select");
+	optionsList = list();
+	optionsList0 = Map();
+	optionsList0.put("value","planned");
+	optionsList0.put("label","Planned");
+	optionsList.add(optionsList0);
+	optionsList1 = Map();
+	optionsList1.put("value","attention");
+	optionsList1.put("label","Needs Attention");
+	optionsList.add(optionsList1);
+	optionsList2 = Map();
+	optionsList2.put("value","InProgress");
+	optionsList2.put("label","In Progress");
+	optionsList.add(optionsList2);
+	optionsList3 = Map();
+	optionsList3.put("value","Completed");
+	optionsList3.put("label","Completed");
+	optionsList.add(optionsList3);
+	inputsList6.put("options",optionsList);
+	inputsList.add(inputsList6);
+	inputsList7 = Map();
+	inputsList7.put("label","Description");
+	inputsList7.put("name","description");
+	inputsList7.put("placeholder","Describe your task");
+	// inputsList7.put("min_length","0");
+	// inputsList7.put("max_length","25");
+	inputsList7.put("mandatory",false);
+	inputsList7.put("type","textarea");
+	inputsList.add(inputsList7);
+	inputsList8 = Map();
+	inputsList8.put("label","Assigned to");
+	inputsList8.put("name","users");
+	inputsList8.put("placeholder","Enter assigned user");
+	inputsList8.put("multiple",false);
+	inputsList8.put("mandatory",true);
+	inputsList8.put("type","text");
+	inputsList8.put("type","native_select");
+	inputsList8.put("data_source","contacts");
+	inputsList.add(inputsList8);
+	response.put("inputs",inputsList);
+	action = Map();
+	action.put("type","invoke.function");
+	action.put("name","formsubmit");
+	response.put("action",action);
+	return response;
+}
+else if(arguments == "-view")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Task No");
+	headersList.add("Title");
+	headersList.add("Planned Duration");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Activity Type");
+	headersList.add("Priority");
+	headersList.add("Condition");
+	headersList.add("Description");
+	headersList.add("Assigned to");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Task No",record.get("taskno"));
+			rowsList0.put("Title",record.get("title"));
+			rowsList0.put("Planned Duration",record.get("duration"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Activity Type",record.get("activity").get("label"));
+			rowsList0.put("Priority",record.get("priority").get("label"));
+			rowsList0.put("Condition",record.get("condition").get("label"));
+			rowsList0.put("Description",record.get("description"));
+			rowsList0.put("Assigned to",record.get("users").get("first_name"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No task details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view task details");
+	return response;
+}
+else if(arguments == "-upd")
+{
+	response = Map();
+	user_email = user.get("email");
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Task No");
+	headersList.add("Title");
+	headersList.add("Planned Duration");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Update");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Task No",record.get("taskno"));
+			rowsList0.put("Title",record.get("title"));
+			rowsList0.put("Planned Duration",record.get("duration"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "updateTask";
+			rowsList0.put("Update","[Update](invoke.function|updateForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No task details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to update task details");
+	return response;
+}
+else if(arguments == "-del")
+{
+	response = Map();
+	query_map = Map();
+	user_email = user.get("email");
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	data = Map();
+	headersList = list();
+	headersList.add("Task No");
+	headersList.add("Title");
+	headersList.add("Planned Duration");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Delete");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Task No",record.get("taskno"));
+			rowsList0.put("Title",record.get("title"));
+			rowsList0.put("Planned Duration",record.get("duration"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			portal_contact = user_email + "|" + record.get("id") + "|" + "deleteTask" + "|" + record.get("title") + "|" + record.get("taskno");
+			rowsList0.put("Delete","[Delete](invoke.function|confirmDeleteForm|" + portal_contact + ")");
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No task details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to delete task details");
+	return response;
+}
+else
+{
+	banner = {"type":"banner","status":"failure","text":"Select a command option"};
+	return banner;
+}
+return response;

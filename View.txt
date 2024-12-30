@@ -1,0 +1,409 @@
+
+response = Map();
+user_email = user.get("email");
+if(sub_action.equalsIgnoreCase("Projects"))
+{
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	info records;
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/1087/1087815.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/1087/1087815.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Project Name");
+	headersList.add("Category");
+	headersList.add("Client");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Status");
+	headersList.add("Team Lead");
+	headersList.add("Team Members");
+	headersList.add("Total Hours");
+	headersList.add("Total Budget");
+	headersList.add("Labor Cost");
+	headersList.add("Product Cost");
+	headersList.add("Description");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Project Name",record.get("projectname"));
+			rowsList0.put("Category",record.get("category").get("label"));
+			rowsList0.put("Client",record.get("client").get("label"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Status",record.get("status").get("label"));
+			team_lead = record.get("teamlead");
+			team_lead_first = team_lead.get("first_name");
+			team_lead_last = team_lead.get("last_name");
+			team_members = record.get("teammembers");
+			if(team_lead_last != null && team_lead_last.trim() != "")
+			{
+				team_lead_full = team_lead_first.trim() + " " + team_lead_last.trim();
+			}
+			else
+			{
+				team_lead_full = team_lead_first.trim();
+			}
+			mem_full = List();
+			for each  member in team_members
+			{
+				member_first = member.get("first_name");
+				member_last = member.get("last_name");
+				if(member_last != null && member_last.trim() != "")
+				{
+					member_full = member_first.trim() + " " + member_last.trim();
+				}
+				else
+				{
+					member_full = member_first.trim();
+				}
+				mem_full.add(member_full);
+			}
+			rowsList0.put("Team Lead",team_lead_full);
+			rowsList0.put("Team Members",mem_full);
+			rowsList0.put("Total Hours",record.get("totalhours"));
+			rowsList0.put("Total Budget",record.get("totalbudget"));
+			rowsList0.put("Labor Cost",record.get("laborcost"));
+			rowsList0.put("Product Cost",record.get("productcost"));
+			rowsList0.put("Description",record.get("description"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No project details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view project details");
+}
+else if(sub_action.equalsIgnoreCase("Quotes"))
+{
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/11000/11000527.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/11000/11000527.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Quote No.");
+	headersList.add("Client");
+	headersList.add("Date of Issue");
+	headersList.add("Comment");
+	headersList.add("Product | Service");
+	headersList.add("Quantity");
+	headersList.add("Unit Price");
+	headersList.add("Discount");
+	headersList.add("Tax Value");
+	headersList.add("Due Date");
+	headersList.add("Estimated Closing Date");
+	headersList.add("Estimated Duration");
+	headersList.add("Status");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Quote No.",record.get("quoteno"));
+			rowsList0.put("Client",record.get("client").get("label"));
+			rowsList0.put("Date of Issue",record.get("dateofissue"));
+			rowsList0.put("Comment",record.get("comment"));
+			rowsList0.put("Product | Service",record.get("product"));
+			rowsList0.put("Quantity",record.get("quantity"));
+			rowsList0.put("Unit Price",record.get("unitprice"));
+			rowsList0.put("Discount",record.get("discount"));
+			rowsList0.put("Tax Value",record.get("taxvalue"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Estimated Closing Date",record.get("closedate"));
+			rowsList0.put("Estimated Duration",record.get("duration"));
+			rowsList0.put("Status",record.get("status").get("label"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No quote details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view quote details");
+}
+else if(sub_action.equalsIgnoreCase("Invoices"))
+{
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/256/3756/3756412.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/3756/3756412.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Invoice No.");
+	headersList.add("Author");
+	headersList.add("Date of Issue");
+	headersList.add("Due Date");
+	headersList.add("Payer");
+	headersList.add("Comment");
+	headersList.add("Product | Service");
+	headersList.add("Quantity");
+	headersList.add("Unit Price");
+	headersList.add("Discount");
+	headersList.add("Tax Value");
+	headersList.add("Payment Method");
+	headersList.add("Overdue Interest");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Invoice No.",record.get("invoiceno"));
+			rowsList0.put("Author",record.get("author").get("first_name"));
+			rowsList0.put("Date of Issue",record.get("dateofissue"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Payer",record.get("payer").get("label"));
+			rowsList0.put("Comment",record.get("comment"));
+			rowsList0.put("Product | Service",record.get("product"));
+			rowsList0.put("Quantity",record.get("quantity"));
+			rowsList0.put("Unit Price",record.get("unitprice"));
+			rowsList0.put("Discount",record.get("discount"));
+			rowsList0.put("Tax Value",record.get("taxvalue"));
+			rowsList0.put("Payment Method",record.get("paymentmethod").get("label"));
+			rowsList0.put("Overdue Interest",record.get("overdue"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No invoice details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view invoice details");
+}
+else if(sub_action.equalsIgnoreCase("Bills"))
+{
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/256/625/625603.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/256/625/625603.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Project ID");
+	headersList.add("Bill No.");
+	headersList.add("Recipient");
+	headersList.add("Date of Issue");
+	headersList.add("Due Date");
+	headersList.add("Issuer");
+	headersList.add("Comment");
+	headersList.add("Product | Service");
+	headersList.add("Quantity");
+	headersList.add("Unit Price");
+	headersList.add("Payment Method");
+	headersList.add("Price List");
+	headersList.add("Discount");
+	headersList.add("Tax");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Project ID",record.get("projectid"));
+			rowsList0.put("Bill No.",record.get("billno"));
+			rowsList0.put("Recipient",record.get("recipient").get("label"));
+			rowsList0.put("Date of Issue",record.get("dateofissue"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Issuer",record.get("issuer").get("first_name"));
+			rowsList0.put("Comment",record.get("comment"));
+			rowsList0.put("Product | Service",record.get("product"));
+			rowsList0.put("Quantity",record.get("quantity"));
+			rowsList0.put("Unit Price",record.get("unitprice"));
+			rowsList0.put("Payment Method",record.get("paymentmethod").get("label"));
+			rowsList0.put("Price List",record.get("pricelist").get("label"));
+			rowsList0.put("Discount",record.get("discount"));
+			rowsList0.put("Tax",record.get("tax"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No bill details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view bill details");
+}
+else if(sub_action.equalsIgnoreCase("Tasks"))
+{
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	optionsList = list();
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+	}
+	response = Map();
+	card = Map();
+	card.put("icon","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	card.put("theme","prompt");
+	card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/686/686562.png");
+	response.put("card",card);
+	slidesList = list();
+	slidesList0 = Map();
+	slidesList0.put("type","table");
+	// slidesList0.put("title","Client");
+	data = Map();
+	headersList = list();
+	headersList.add("Task No");
+	headersList.add("Title");
+	headersList.add("Planned Duration");
+	headersList.add("Start Date");
+	headersList.add("Due Date");
+	headersList.add("Activity Type");
+	headersList.add("Priority");
+	headersList.add("Condition");
+	headersList.add("Description");
+	headersList.add("Assigned to");
+	data.put("headers",headersList);
+	rowsList = list();
+	if(records.size() > 0)
+	{
+		for each  record in records
+		{
+			rowsList0 = Map();
+			rowsList0.put("Task No",record.get("taskno"));
+			rowsList0.put("Title",record.get("title"));
+			rowsList0.put("Planned Duration",record.get("duration"));
+			rowsList0.put("Start Date",record.get("startdate"));
+			rowsList0.put("Due Date",record.get("duedate"));
+			rowsList0.put("Activity Type",record.get("activity").get("label"));
+			rowsList0.put("Priority",record.get("priority").get("label"));
+			rowsList0.put("Condition",record.get("condition").get("label"));
+			rowsList0.put("Description",record.get("description"));
+			rowsList0.put("Assigned to",record.get("users").get("first_name"));
+			rowsList.add(rowsList0);
+			data.put("rows",rowsList);
+			slidesList0.put("data",data);
+		}
+	}
+	else if(records.size() == 0)
+	{
+		response.put("text","No task details found");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	slidesList.add(slidesList0);
+	response.put("slides",slidesList);
+	response.put("text","Click to view task details");
+}
+else
+{
+	banner = {"type":"banner","status":"failure","text":"Select one of the options from the sub-action menu."};
+	return banner;
+}
+return response;

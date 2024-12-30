@@ -1,0 +1,26 @@
+
+response = Map();
+type = message.get("type");
+info messages;
+if(type == "text")
+{
+	content = message.get("text");
+	zoho.cliq.postToChannel("announcements",content);
+}
+else if(type == "file")
+{
+	content = message.get("file");
+	zoho.cliq.postToChannel("announcements",content);
+}
+else if(type == "card")
+{
+	cont = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/chats/" + chat.get("id") + "/messages/" + message.get("id")
+		type :GET
+		connection:"cliq_connection"
+	];
+	mess = cont.get("content");
+	zoho.cliq.postToChannel("announcements",mess);
+}
+return response;

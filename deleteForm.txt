@@ -1,0 +1,954 @@
+
+// Use the below given instant button's syntax to see how the function code is invoked! 
+// [What's this?](invoke.function|deleteContact)
+response = Map();
+check = arguments.get("val");
+if(check == "deletecontact")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "contactid==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("contactdb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected contact has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the contact \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Contact not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "cancelcontact")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "contactid == " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Contact deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Contact not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deleteproject")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "projectid==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("projectdb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected project has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the project \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Project not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "deletequote")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "quoteno==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("quotedb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected quote has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the quote \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Quote not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "deleteinvoice")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "invoiceno==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("invoicedb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected invoice has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the invoice \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Invoice not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "deletebill")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "billno==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("billsdb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected bill has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the bill \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Bill not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "deletetask")
+{
+	deleteProject = Map();
+	contactid = arguments.get("key");
+	query_map = Map();
+	criteria_string = "taskno==" + contactid;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		record_id = response_map.get("list").get(0).get("id");
+	}
+	if(record_id != null && record_id != 0)
+	{
+		delete_response = zoho.cliq.deleteRecord("taskdb",record_id);
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Selected task has been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the task \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Task not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return deleteProject;
+}
+else if(check == "cancelproject")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "projectid== " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Project deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Project not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelquote")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "quoteno== " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Quote deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Quote not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelinvoice")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "invoiceno== " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Invoice deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Invoice not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelbill")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "billno== " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Bill deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Bill not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "canceltask")
+{
+	contact_id = arguments.get("key");
+	response = Map();
+	query_map = Map();
+	criteria_string = "taskno== " + contact_id;
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Task deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Task not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesampleproject")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("projectdb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample project records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsampleproject")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "projectid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("projectdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample project deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesamplequote")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("quotedb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample quote records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesampleinvoice")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("invoicedb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample invoice records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesamplebill")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("billsdb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample bill records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesampletask")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("taskdb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample task records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsamplequote")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "quoteno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("quotedb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample quote deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsampleinvoice")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "invoiceno!=''";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("invoicedb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample invoice deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsamplebill")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "billno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("billsdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample bill deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsampletask")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "taskno>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("taskdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample task deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "deletesamplecontact")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	record_id = 0;
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		records = response_map.get("list");
+		info records;
+		for each  record in records
+		{
+			record_id = record.get("id");
+			delete_response = zoho.cliq.deleteRecord("contactdb",record_id);
+		}
+		if(delete_response.get("status").equalsIgnoreCase("SUCCESS"))
+		{
+			response = Map();
+			response.put("text","Sample contact records have been deleted");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+		else
+		{
+			response = Map();
+			response.put("text","Error deleting the records \n  Please try again");
+			card = Map();
+			card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/7778/7778611.png");
+			card.put("theme","prompt");
+			response.put("card",card);
+			return response;
+		}
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+else if(check == "cancelsamplecontact")
+{
+	response = Map();
+	query_map = Map();
+	criteria_string = "contactid>=0";
+	query_map.put("criteria",criteria_string);
+	response_map = zoho.cliq.getRecords("contactdb",query_map);
+	if(response_map.get("status").equalsIgnoreCase("SUCCESS") && response_map.get("list").size() > 0)
+	{
+		response = Map();
+		response.put("text","Sample contact deletion has been canceled");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313152.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	else
+	{
+		response = Map();
+		response.put("text","Records not found!");
+		card = Map();
+		card.put("thumbnail","https://cdn-icons-png.flaticon.com/512/10313/10313348.png");
+		card.put("theme","prompt");
+		response.put("card",card);
+		return response;
+	}
+	return response;
+}
+return response;

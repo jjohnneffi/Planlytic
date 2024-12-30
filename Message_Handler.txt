@@ -1,0 +1,21 @@
+
+response = Map();
+if(message.containsIgnoreCase("HI") || message.containsIgnoreCase("HEY"))
+{
+	text = "Hi! How you doin'? :wink:";
+	response.put("suggestions",{"list":{{"text":"I am great!"},{"text":"Meh!"}}});
+}
+else if(message.equals("I am great!"))
+{
+	text = "Glad to hear that! :smile:";
+}
+else if(message.equals("Meh!"))
+{
+	text = "Oops! Don't you worry. Your day is definitely going to get better. :grinning:";
+}
+else
+{
+	text = "You can use this extension to manage your projects, collaborate seamlessly, and stay on top of your tasks. Access the Help section in the widgets for more information! :smile:";
+}
+response.put("text",text);
+return response;

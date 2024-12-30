@@ -1,0 +1,449 @@
+
+response = Map();
+projectList = list();
+project = Map();
+// Project 1
+projectValues = Map();
+projectValues.put("category",{"label":"Work","value":"work"});
+projectValues.put("client",{"label":"Client A","value":"clienta"});
+projectValues.put("totalhours",450);
+projectValues.put("status",{"label":"Completed","value":"completed"});
+projectValues.put("projectid",98434);
+projectValues.put("totalbudget",2000000);
+projectValues.put("duedate","2024-10-31");
+projectValues.put("productcost",2000);
+projectValues.put("projectname","Project A");
+projectValues.put("teammembers",{{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"}});
+projectValues.put("laborcost",1500000);
+projectValues.put("startdate","2024-08-05");
+projectValues.put("description","Define user requirements for AI chatbot");
+projectValues.put("teamlead",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+projectList.add(projectValues);
+// Project 2
+projectValues1 = Map();
+projectValues1.put("category",{"label":"Personal","value":"personal"});
+projectValues1.put("client",{"label":"Client B","value":"clientb"});
+projectValues1.put("totalhours",0);
+projectValues1.put("status",{"label":"In Progress","value":"inprogress"});
+projectValues1.put("projectid",98431);
+projectValues1.put("totalbudget",0);
+projectValues1.put("duedate","2025-03-31");
+projectValues1.put("productcost",0);
+projectValues1.put("projectname","Project B");
+projectValues1.put("teammembers",{{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"}});
+projectValues1.put("laborcost",0);
+projectValues1.put("startdate","2024-11-01");
+projectValues1.put("description","-");
+projectValues1.put("teamlead",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+projectList.add(projectValues1);
+projectValues2 = Map();
+projectValues2.put("category",{"label":"Work","value":"work"});
+projectValues2.put("client",{"label":"Client C","value":"clientc"});
+projectValues2.put("totalhours",450);
+projectValues2.put("status",{"label":"In Progress","value":"inprogress"});
+projectValues2.put("projectid",98488);
+projectValues2.put("totalbudget",3000000);
+projectValues2.put("duedate","2025-01-30");
+projectValues2.put("productcost",20000);
+projectValues2.put("projectname","Project C");
+projectValues2.put("teammembers",{{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"}});
+projectValues2.put("laborcost",2000000);
+projectValues2.put("startdate","2024-11-04");
+projectValues2.put("description","	Identify user needs like activity tracking, goal setting, and health insights");
+projectValues2.put("teamlead",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+projectList.add(projectValues2);
+project.put("values",projectList);
+info project;
+for each  val in project.get("values")
+{
+	proj = Map();
+	proj.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/projectdb/records"
+		type :POST
+		parameters:proj.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+quoteList = list();
+quote = Map();
+quoteValues = Map();
+quoteValues.put("dateofissue","2024-12-23");
+quoteValues.put("quoteno","59434");
+quoteValues.put("client",{"label":"Client C","value":"clientc"});
+quoteValues.put("taxvalue",1);
+quoteValues.put("quantity",1);
+quoteValues.put("closedate","2025-02-14");
+quoteValues.put("duration","500");
+quoteValues.put("status",{"label":"Confirmed","value":"confirmed"});
+quoteValues.put("projectid",98488);
+quoteValues.put("comment","Build app features for tracking, notifications, and wearable integrations");
+quoteValues.put("duedate","2025-02-10");
+quoteValues.put("unitprice",3500000);
+quoteValues.put("product","Product C");
+quoteValues.put("discount",1);
+quoteList.add(quoteValues);
+quoteValues1 = Map();
+quoteValues1.put("dateofissue","2024-10-14");
+quoteValues1.put("quoteno","23984");
+quoteValues1.put("client",{"label":"Client A","value":"clienta"});
+quoteValues1.put("taxvalue",1);
+quoteValues1.put("quantity",1);
+quoteValues1.put("closedate","2024-11-15");
+quoteValues1.put("duration","500");
+quoteValues1.put("status",{"label":"Confirmed","value":"confirmed"});
+quoteValues1.put("projectid",98434);
+quoteValues1.put("comment","Implement natural language processing and integrate APIs for real-time responses");
+quoteValues1.put("duedate","2024-11-08");
+quoteValues1.put("unitprice",2800000);
+quoteValues1.put("product","Product A");
+quoteValues1.put("discount",1);
+quoteList.add(quoteValues1);
+quoteValues2 = Map();
+quoteValues2.put("dateofissue","-");
+quoteValues2.put("quoteno","58745");
+quoteValues2.put("client",{"label":"Client B","value":"clientb"});
+quoteValues2.put("taxvalue",0);
+quoteValues2.put("quantity",0);
+quoteValues2.put("closedate","-");
+quoteValues2.put("duration","-");
+quoteValues2.put("status",{"label":"Confirmed","value":"confirmed"});
+quoteValues2.put("projectid",98431);
+quoteValues2.put("comment","");
+quoteValues2.put("duedate","");
+quoteValues2.put("unitprice",0);
+quoteValues2.put("product","");
+quoteValues2.put("discount",0);
+quoteList.add(quoteValues2);
+quote.put("values",quoteList);
+info quote;
+for each  val in quote.get("values")
+{
+	quot = Map();
+	quot.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/quotedb/records"
+		type :POST
+		parameters:quot.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+invoiceList = list();
+invoice = Map();
+invoiceValues = Map();
+invoiceValues.put("dateofissue","2024-10-31");
+invoiceValues.put("payer",{"label":"Client A","value":"clienta"});
+invoiceValues.put("taxvalue",1);
+invoiceValues.put("quantity",1);
+invoiceValues.put("author",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+invoiceValues.put("projectid",98434);
+invoiceValues.put("comment","Validate chatbot accuracy and optimize response quality through user testing");
+invoiceValues.put("duedate","18");
+invoiceValues.put("overdue","1");
+invoiceValues.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+invoiceValues.put("invoiceno","95845");
+invoiceValues.put("unitprice",1850000);
+invoiceValues.put("product","Product A");
+invoiceValues.put("discount",1);
+invoiceList.add(invoiceValues);
+invoiceValues1 = Map();
+invoiceValues1.put("dateofissue","2025-01-27");
+invoiceValues1.put("payer",{"label":"Client C","value":"clientc"});
+invoiceValues1.put("taxvalue",1);
+invoiceValues1.put("quantity",1);
+invoiceValues1.put("author",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+invoiceValues1.put("projectid",98488);
+invoiceValues1.put("comment","Test app performance on various devices and scenarios");
+invoiceValues1.put("duedate","18");
+invoiceValues1.put("overdue","1");
+invoiceValues1.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+invoiceValues1.put("invoiceno","90494");
+invoiceValues1.put("unitprice",3500000);
+invoiceValues1.put("product","Product C");
+invoiceValues1.put("discount",1);
+invoiceList.add(invoiceValues1);
+invoiceValues2 = Map();
+invoiceValues2.put("dateofissue","2025-01-06");
+invoiceValues2.put("payer",{"label":"Client B","value":"clientb"});
+invoiceValues2.put("taxvalue",0);
+invoiceValues2.put("quantity",0);
+invoiceValues2.put("author",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+invoiceValues2.put("projectid",98431);
+invoiceValues2.put("comment","");
+invoiceValues2.put("duedate","85");
+invoiceValues2.put("overdue","1");
+invoiceValues2.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+invoiceValues2.put("invoiceno","98557");
+invoiceValues2.put("unitprice",0);
+invoiceValues2.put("product","");
+invoiceValues2.put("discount",0);
+invoiceList.add(invoiceValues2);
+invoice.put("values",invoiceList);
+info invoice;
+for each  val in invoice.get("values")
+{
+	invo = Map();
+	invo.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/invoicedb/records"
+		type :POST
+		parameters:invo.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+billsList = list();
+bills = Map();
+billsValues = Map();
+billsValues.put("dateofissue","2025-02-12");
+billsValues.put("billno",48745);
+billsValues.put("tax",1);
+billsValues.put("pricelist",{"label":"INR","value":"INR"});
+billsValues.put("quantity",1);
+billsValues.put("projectid",98488);
+billsValues.put("comment","Release the app on app stores with marketing campaigns for users");
+billsValues.put("duedate","2025-02-14");
+billsValues.put("issuer",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+billsValues.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+billsValues.put("recipient",{"label":"Client C","value":"clientc"});
+billsValues.put("unitprice",3500000);
+billsValues.put("product","Product C");
+billsValues.put("discount","1");
+billsList.add(billsValues);
+billsValues1 = Map();
+billsValues1.put("dateofissue","2024-11-18");
+billsValues1.put("billno",54547);
+billsValues1.put("tax",1);
+billsValues1.put("pricelist",{"label":"INR","value":"INR"});
+billsValues1.put("quantity",1);
+billsValues1.put("projectid",98434);
+billsValues1.put("comment","Launch the chatbot with monitoring tools for continuous performance improvement");
+billsValues1.put("duedate","2024-11-20");
+billsValues1.put("issuer",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+billsValues1.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+billsValues1.put("recipient",{"label":"Client A","value":"clienta"});
+billsValues1.put("unitprice",1850000);
+billsValues1.put("product","Product A");
+billsValues1.put("discount","1");
+billsList.add(billsValues1);
+billsValues2 = Map();
+billsValues2.put("dateofissue","2025-03-24");
+billsValues2.put("billno",48568);
+billsValues2.put("tax",0);
+billsValues2.put("pricelist",{"label":"INR","value":"INR"});
+billsValues2.put("quantity",0);
+billsValues2.put("projectid",98431);
+billsValues2.put("comment","");
+billsValues2.put("duedate","-");
+billsValues2.put("issuer",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+billsValues2.put("paymentmethod",{"label":"Bank Transfer","value":"banktransfer"});
+billsValues2.put("recipient",{"label":"Client B","value":"clientb"});
+billsValues2.put("unitprice",0);
+billsValues2.put("product","");
+billsValues2.put("discount","-");
+billsList.add(billsValues2);
+bills.put("values",billsList);
+info bills;
+for each  val in bills.get("values")
+{
+	bill = Map();
+	bill.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/billsdb/records"
+		type :POST
+		parameters:bill.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+taskList = list();
+task = Map();
+taskValues = Map();
+taskValues.put("users",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+taskValues.put("condition",{"label":"Completed","value":"Completed"});
+taskValues.put("activity",{"label":"Strategy","value":"Strategy"});
+taskValues.put("taskno",48481);
+taskValues.put("duration",120);
+taskValues.put("duedate","2024-10-28");
+taskValues.put("title","Task A");
+taskValues.put("priority",{"value":"mediumpriority","label":"Medium Priority"});
+taskValues.put("startdate","2024-10-07");
+taskValues.put("description","Set Up Database Architecture for E-Commerce System");
+taskList.add(taskValues);
+taskValues1 = Map();
+taskValues1.put("users",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+taskValues1.put("condition",{"label":"Completed","value":"Completed"});
+taskValues1.put("activity",{"label":"Project Management","value":"ProjectManagement"});
+taskValues1.put("taskno",12838);
+taskValues1.put("duration",150);
+taskValues1.put("duedate","2024-10-07");
+taskValues1.put("title","Task B");
+taskValues1.put("priority",{"value":"highpriority","label":"High Priority"});
+taskValues1.put("startdate","2024-09-02");
+taskValues1.put("description","Integrate API for Payment Gateway in E-Commerce Site");
+taskList.add(taskValues1);
+taskValues2 = Map();
+taskValues2.put("users",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+taskValues2.put("condition",{"label":"Planned","value":"planned"});
+taskValues2.put("activity",{"label":"Design","value":"Design"});
+taskValues2.put("taskno",91224);
+taskValues2.put("duration",60);
+taskValues2.put("duedate","2024-12-16");
+taskValues2.put("title","Task C");
+taskValues2.put("priority",{"value":"highpriority","label":"High Priority"});
+taskValues2.put("startdate","2024-12-02");
+taskValues2.put("description","Design Responsive Web Layout for E-Commerce Site");
+taskList.add(taskValues2);
+taskValues3 = Map();
+taskValues3.put("users",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+taskValues3.put("condition",{"label":"In Progress","value":"InProgress"});
+taskValues3.put("activity",{"label":"Project Management","value":"ProjectManagement"});
+taskValues3.put("taskno",37488);
+taskValues3.put("duration",100);
+taskValues3.put("duedate","2024-12-07");
+taskValues3.put("title","Task D");
+taskValues3.put("priority",{"value":"highpriority","label":"High Priority"});
+taskValues3.put("startdate","2024-11-04");
+taskValues3.put("description","Implement User Authentication and Authorization in Mobile App");
+taskList.add(taskValues3);
+taskValues4 = Map();
+taskValues4.put("users",{"zoho_user_id":"871238036","last_name":"","id":"871238036","type":"contact","first_name":"John","email":"jjohnneff@gmail.com"});
+taskValues4.put("condition",{"label":"Planned","value":"planned"});
+taskValues4.put("activity",{"label":"Research","value":"Research"});
+taskValues4.put("taskno",99848);
+taskValues4.put("duration",0);
+taskValues4.put("duedate","2025-02-10");
+taskValues4.put("title","Task E");
+taskValues4.put("priority",{"value":"highpriority","label":"High Priority"});
+taskValues4.put("startdate","2025-01-06");
+taskValues4.put("description","");
+taskList.add(taskValues4);
+task.put("values",taskList);
+info task;
+for each  val in task.get("values")
+{
+	tasks = Map();
+	tasks.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/taskdb/records"
+		type :POST
+		parameters:tasks.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+contactList = list();
+contact = Map();
+contactValues = Map();
+contactValues.put("regno",854458);
+contactValues.put("website","https://www.zoho.com/");
+contactValues.put("name","Client A");
+contactValues.put("emailid","ClientA@gmail.com");
+contactValues.put("category",{"label":"A - VIP Client","value":"vipclient"});
+contactValues.put("contactid",65368);
+contactValues.put("country","India");
+contactValues.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues.put("taxno",982398);
+contactValues.put("idcode",129238);
+contactValues.put("postalcode",653349);
+contactValues.put("address","123 Business St, New Delhi");
+contactValues.put("description","This client offers frontend-related projects");
+contactList.add(contactValues);
+contactValues1 = Map();
+contactValues1.put("regno",243829);
+contactValues1.put("website","https://www.zoho.com/");
+contactValues1.put("name","Client B");
+contactValues1.put("emailid","ClientB@gmail.com");
+contactValues1.put("category",{"label":"B - Standard Client","value":"standardclient"});
+contactValues1.put("contactid",98348);
+contactValues1.put("country","India");
+contactValues1.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues1.put("taxno",982198);
+contactValues1.put("idcode",129638);
+contactValues1.put("postalcode",653249);
+contactValues1.put("address","456 Corporate Ave, Pune");
+contactValues1.put("description","This client offers backend-related projects");
+contactList.add(contactValues1);
+contactValues2 = Map();
+contactValues2.put("regno",248829);
+contactValues2.put("website","https://www.zoho.com/");
+contactValues2.put("name","Client C");
+contactValues2.put("emailid","ClientC@gmail.com");
+contactValues2.put("category",{"label":"C - Ex - Client","value":"exclient"});
+contactValues2.put("contactid",99237);
+contactValues2.put("country","India");
+contactValues2.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues2.put("taxno",989998);
+contactValues2.put("idcode",125438);
+contactValues2.put("postalcode",653849);
+contactValues2.put("address","789 Trade Circle, Mumbai");
+contactValues2.put("description","This client offers cloud-based projects");
+contactList.add(contactValues2);
+contactValues3 = Map();
+contactValues3.put("regno",676567);
+contactValues3.put("website","https://www.zoho.com/");
+contactValues3.put("name","Client D");
+contactValues3.put("emailid","ClientD@gmail.com");
+contactValues3.put("category",{"label":"A - VIP Client","value":"vipclient"});
+contactValues3.put("contactid",90037);
+contactValues3.put("country","India");
+contactValues3.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues3.put("taxno",999998);
+contactValues3.put("idcode",160638);
+contactValues3.put("postalcode",699649);
+contactValues3.put("address","321 Skyline Blvd, Bengaluru");
+contactValues3.put("description","This client offers database management projects");
+contactList.add(contactValues3);
+contactValues4 = Map();
+contactValues4.put("regno",985458);
+contactValues4.put("website","https://www.zoho.com/");
+contactValues4.put("name","Client E");
+contactValues4.put("emailid","ClientE@gmail.com");
+contactValues4.put("category",{"label":"A - VIP Client","value":"vipclient"});
+contactValues4.put("contactid",90127);
+contactValues4.put("country","India");
+contactValues4.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues4.put("taxno",129288);
+contactValues4.put("idcode",983638);
+contactValues4.put("postalcode",618349);
+contactValues4.put("address","654 Greenway Ln, Hyderabad");
+contactValues4.put("description","This client offers cybersecurity related projects");
+contactList.add(contactValues4);
+contactValues5 = Map();
+contactValues5.put("regno",0);
+contactValues5.put("website","https://www.zoho.com/");
+contactValues5.put("name","Client F");
+contactValues5.put("emailid","ClientF@gmail.com");
+contactValues5.put("category",{"label":"A - VIP Client","value":"vipclient"});
+contactValues5.put("contactid",636367);
+contactValues5.put("country","-");
+contactValues5.put("timezone",{"label":"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi","value":"india"});
+contactValues5.put("taxno",0);
+contactValues5.put("idcode",0);
+contactValues5.put("postalcode",0);
+contactValues5.put("address","");
+contactValues5.put("description","");
+contactList.add(contactValues5);
+contact.put("values",contactList);
+info contact;
+for each  val in contact.get("values")
+{
+	contacts = Map();
+	contacts.put("values",val);
+	addrecord = invokeurl
+	[
+		url :"https://cliq.zoho.com/api/v2/storages/contactdb/records"
+		type :POST
+		parameters:contacts.toString()
+		connection:"cliq_connection"
+	];
+	info addrecord;
+}
+return response;
