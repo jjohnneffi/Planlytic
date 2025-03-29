@@ -1,1 +1,1 @@
-
+Developed using Deluge Script, this extension enhances Zoho Cliq by integrating multiple components such as commands, bots, message actions, widgets, functions, schedulers and databases for seamless automation and productivity
