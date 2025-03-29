@@ -1,1 +1,1 @@
-Planlytic Extension is a smart productivity tool built on Zoho Cliq, Zoho Analytics, and Zoho Catalyst, designed to streamline project planning, task management, and data-driven decision-making. It leverages JavaScript, Node.js, Express.js, and React.js for a seamless user experience, while REST APIs enable smooth data integration. With advanced workflow automation and insightful analytics, Planlytic enhances collaboration, optimizes operations, and boosts efficiency.
+
